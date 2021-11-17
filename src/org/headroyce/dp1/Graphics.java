@@ -6,7 +6,9 @@ public class Graphics {
     private Canvas canvas;
 
     public Graphics() {
-        canvas.setHeight(100);
-        canvas.setWidth(200);
+        canvas.setHeight(400);
+        canvas.setWidth(800);
     }
+
+
 }
