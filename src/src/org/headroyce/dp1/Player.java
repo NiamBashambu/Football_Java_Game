@@ -10,5 +10,9 @@ public class Player {
         this.y = y;
         this.position = position;
     }
+    public String toString(){
+        String rtn = "(" + this.x +", "+this.y+")";
+        return rtn;
+    }
 
 }
