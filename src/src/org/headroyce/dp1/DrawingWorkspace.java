@@ -35,6 +35,9 @@ public class DrawingWorkspace extends BorderPane{
         gc = canvas.getGraphicsContext2D();
 
         StackPane center = new StackPane();
+        center.setMinSize(0,0);
+
+
         center.getChildren().add(canvas);
         canvas.widthProperty().bind(center.widthProperty());
         canvas.heightProperty().bind(center.heightProperty());
@@ -50,6 +53,7 @@ public class DrawingWorkspace extends BorderPane{
     }
 
     public void refreshScreen(){
+
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         gc.setFill(Color.GREEN);
@@ -63,4 +67,5 @@ public class DrawingWorkspace extends BorderPane{
         // lt.renderTool();
 
     }
+
 }
