@@ -27,22 +27,40 @@ import javafx.stage.Stage;
 
 public class DrawingWorkspace extends BorderPane{
     private Canvas canvas;
+    private LineTool lt;
     private GraphicsContext gc;
 
     public DrawingWorkspace() {
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
-        canvas.widthProperty().bind(this.widthProperty());
-        canvas.heightProperty().bind(this.heightProperty());
+
+        StackPane center = new StackPane();
+        center.getChildren().add(canvas);
+        canvas.widthProperty().bind(center.widthProperty());
+        canvas.heightProperty().bind(center.heightProperty());
 
 
-        this.setCenter(canvas);
+        lt = new LineTool(canvas);
+        VBox tools = new VBox();
+        tools.getChildren().add(lt.renderTool());
+
+       this.setRight(tools);
+       this.setCenter(center);
+
     }
 
     public void refreshScreen(){
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setFill(Color.GREEN);
+        gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(4);
         gc.strokeLine(0, canvas.getHeight()*0.8, canvas.getWidth(), canvas.getHeight()*0.8);
+
+
+        // lt.renderTool();
+
     }
 }

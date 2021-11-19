@@ -1,7 +1,9 @@
 package org.headroyce.dp1;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 
 public class LineTool {
     private LList<Point2D> points;
@@ -21,4 +23,14 @@ public class LineTool {
         points = new LList<>();
         // select(false);
     }
+
+    public Node renderTool() {
+        Button toolGUI = new Button("Line");
+        return toolGUI;
+    }
+
+    /* public boolean isMouseDown(Point2D m) {
+        this.mouseDown = true;
+
+    } */
 }

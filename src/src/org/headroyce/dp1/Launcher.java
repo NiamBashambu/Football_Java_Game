@@ -22,7 +22,7 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) {
         DrawingWorkspace dw = new DrawingWorkspace();
         primaryStage.setTitle("Canvas");
-        primaryStage.setScene(new Scene(dw, 800, 600, Color.GREEN));
+        primaryStage.setScene(new Scene(dw, 800, 600));
         primaryStage.show();
 
         primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
