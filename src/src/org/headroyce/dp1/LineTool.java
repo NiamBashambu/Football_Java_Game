@@ -18,7 +18,7 @@ public class LineTool {
     private boolean mouseDown, mouseMove;
     private int selectedPoint, oldSelectedPoint;
     private static final int LINE_WIDTH = 2;
-    private static final int POINT_RADIUS = 5;
+    private static final int POINT_RADIUS = 10;
 
     private Canvas c;
 
@@ -49,9 +49,18 @@ public class LineTool {
 
         GraphicsContext gc =  c.getGraphicsContext2D();
         gc.setFill(Color.WHITE);
+
         for (int i = 0; i < points.size(); i++) {
+            gc.setStroke(Color.BLACK);
             Point2D p = points.get(i);
-           gc.fillOval(p.getX(), p.getY(), POINT_RADIUS, POINT_RADIUS);
+            gc.strokeOval(p.getX(), p.getY(), POINT_RADIUS, POINT_RADIUS);
+            gc.fillOval(p.getX(), p.getY(), POINT_RADIUS, POINT_RADIUS);
+            if (i != 0) {
+                Point2D p2 = points.get(i-1);
+                gc.setStroke(Color.LIGHTGREEN);
+                gc.strokeLine(p2.getX(), p2.getY(), p.getX(), p.getY());
+            }
+
         }
         return true;
     }
