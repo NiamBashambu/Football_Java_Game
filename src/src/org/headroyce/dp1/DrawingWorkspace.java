@@ -56,7 +56,22 @@ public class DrawingWorkspace extends BorderPane{
 
         lt = new LineTool(canvas);
         VBox tools = new VBox();
-        tools.getChildren().add(lt.renderTool());
+
+        Node ltButton = lt.renderTool();
+        ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if (evt.isPrimaryButtonDown()) {
+                    if (getMode() == MODES.DRAWING_MODE) {
+                        setMode(MODES.ALL_OFF);
+                    } else if (getMode() == MODES.ALL_OFF) {
+                        setMode(MODES.DRAWING_MODE);
+                    }
+
+                }
+            }
+        });
+        tools.getChildren().add(ltButton);
 
        this.setRight(tools);
        this.setCenter(center);
@@ -95,6 +110,7 @@ public class DrawingWorkspace extends BorderPane{
         @Override
         public void handle(MouseEvent evt) {
 
+            System.err.println("HERE");
                 if( mode == MODES.DRAWING_MODE) {
                     Point2D p = new Point2D(evt.getX(), evt.getY());
                     lt.addPoint(p);

@@ -18,16 +18,14 @@ public class LineTool {
     private static final int LINE_WIDTH = 2;
     private static final int POINT_RADIUS = 5;
 
-    private String mode;
-
     private Canvas c;
+
 
     public LineTool(Canvas c){
         // setMode("draw");
 
         this.c = c;
         points = new LList<>();
-        mode = null;
         // select(false);
     }
 
@@ -36,19 +34,10 @@ public class LineTool {
         return toolGUI;
     }
 
-    public String getMode(){ return mode; }
-    public boolean setMode( String newMode ){
-        boolean rtn = false;
-        if( newMode != null ){
-            mode = newMode;
-            rtn = true;
-        }
-        return rtn;
-    }
 
-    public boolean wasButtonPressed() {
+    /* public boolean wasButtonPressed() {
         return false;
-    }
+    }*/
     public boolean addPoint( Point2D p ){
         points.add(p);
         return true;
