@@ -6,8 +6,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class LineTool {
     private LList<Point2D> points;
@@ -40,6 +42,17 @@ public class LineTool {
     }*/
     public boolean addPoint( Point2D p ){
         points.add(p);
+        return true;
+    }
+
+    public boolean render (Canvas c) {
+
+        GraphicsContext gc =  c.getGraphicsContext2D();
+        gc.setFill(Color.WHITE);
+        for (int i = 0; i < points.size(); i++) {
+            Point2D p = points.get(i);
+           gc.fillOval(p.getX(), p.getY(), POINT_RADIUS, POINT_RADIUS);
+        }
         return true;
     }
 

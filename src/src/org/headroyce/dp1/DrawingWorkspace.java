@@ -1,4 +1,5 @@
 package org.headroyce.dp1;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -19,14 +20,16 @@ import javafx.scene.effect.ColorInput;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javafx.stage.Stage;
 
-public class DrawingWorkspace extends BorderPane{
+public class DrawingWorkspace extends BorderPane {
     private Canvas canvas;
     private LineTool lt;
     private GraphicsContext gc;
@@ -46,7 +49,7 @@ public class DrawingWorkspace extends BorderPane{
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, new mouseHandler());
 
         StackPane center = new StackPane();
-        center.setMinSize(0,0);
+        center.setMinSize(0, 0);
 
 
         center.getChildren().add(canvas);
@@ -73,32 +76,32 @@ public class DrawingWorkspace extends BorderPane{
         });
         tools.getChildren().add(ltButton);
 
-       this.setRight(tools);
-       this.setCenter(center);
+        this.setRight(tools);
+        this.setCenter(center);
 
-       mode = MODES.ALL_OFF;
+        mode = MODES.ALL_OFF;
 
     }
 
-    public boolean setMode( MODES newMode ){
+    public boolean setMode(MODES newMode) {
         mode = newMode;
         return true;
     }
 
-    public MODES getMode(){
+    public MODES getMode() {
         return mode;
     }
 
-    public void refreshScreen(){
+    public void refreshScreen() {
 
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         gc.setFill(Color.GREEN);
-        gc.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(4);
-        gc.strokeLine(0, canvas.getHeight()*0.8, canvas.getWidth(), canvas.getHeight()*0.8);
+        gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
 
 
         // lt.renderTool();
@@ -111,11 +114,12 @@ public class DrawingWorkspace extends BorderPane{
         public void handle(MouseEvent evt) {
 
             System.err.println("HERE");
-                if( mode == MODES.DRAWING_MODE) {
-                    Point2D p = new Point2D(evt.getX(), evt.getY());
-                    lt.addPoint(p);
-                    System.out.println("p");
-                }
+            if (mode == MODES.DRAWING_MODE) {
+                Point2D p = new Point2D(evt.getX(), evt.getY());
+                lt.addPoint(p);
+                lt.render(canvas);
+                System.out.println("p");
+            }
         }
     }
 
