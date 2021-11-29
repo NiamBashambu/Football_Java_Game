@@ -1,5 +1,6 @@
 package org.headroyce.dp1;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -29,10 +30,20 @@ public class DrawingWorkspace extends BorderPane{
     private Canvas canvas;
     private LineTool lt;
     private GraphicsContext gc;
+    private MODES mode;
+
+    public static enum MODES {
+        ALL_OFF,
+        DRAWING_MODE,
+        STAMP_MODE
+    }
 
     public DrawingWorkspace() {
         canvas = new Canvas(800, 600);
         gc = canvas.getGraphicsContext2D();
+
+
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, new mouseHandler());
 
         StackPane center = new StackPane();
         center.setMinSize(0,0);
@@ -50,6 +61,17 @@ public class DrawingWorkspace extends BorderPane{
        this.setRight(tools);
        this.setCenter(center);
 
+       mode = MODES.ALL_OFF;
+
+    }
+
+    public boolean setMode( MODES newMode ){
+        mode = newMode;
+        return true;
+    }
+
+    public MODES getMode(){
+        return mode;
     }
 
     public void refreshScreen(){
@@ -66,6 +88,19 @@ public class DrawingWorkspace extends BorderPane{
 
         // lt.renderTool();
 
+    }
+
+
+    public class mouseHandler implements EventHandler<MouseEvent> {
+        @Override
+        public void handle(MouseEvent evt) {
+
+                if( mode == MODES.DRAWING_MODE) {
+                    Point2D p = new Point2D(evt.getX(), evt.getY());
+                    lt.addPoint(p);
+                    System.out.println("p");
+                }
+        }
     }
 
 }

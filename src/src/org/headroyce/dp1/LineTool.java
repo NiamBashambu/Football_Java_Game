@@ -49,17 +49,13 @@ public class LineTool {
     public boolean wasButtonPressed() {
         return false;
     }
-
-    private class mouseHandler implements EventHandler<MouseEvent> {
-        @Override
-        public void handle(MouseEvent evt) {
-            if(evt.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
-                Point2D p = new Point2D(evt.getX(), evt.getY());
-                points.add(p);
-            }
-
-        }
+    public boolean addPoint( Point2D p ){
+        points.add(p);
+        return true;
     }
+
+
+
 
 
     /* public void mouseClick(MouseEvent mouseEvent) {
