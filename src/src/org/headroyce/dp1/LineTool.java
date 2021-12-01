@@ -18,7 +18,7 @@ public class LineTool {
     private boolean mouseDown, mouseMove;
     private int selectedPoint, oldSelectedPoint;
     private static final int LINE_WIDTH = 2;
-    private static final int POINT_RADIUS = 10;
+    private static final int POINT_RADIUS = 5;
 
     private Canvas c;
 
@@ -31,8 +31,8 @@ public class LineTool {
         // select(false);
     }
 
-    public Node renderTool() {
-        Button toolGUI = new Button("Route");
+    public Node renderTool(String s) {
+        Button toolGUI = new Button(s);
         return toolGUI;
     }
 
@@ -51,16 +51,15 @@ public class LineTool {
         gc.setFill(Color.WHITE);
 
         for (int i = 0; i < points.size(); i++) {
-            gc.setStroke(Color.BLACK);
             Point2D p = points.get(i);
-            gc.strokeOval(p.getX(), p.getY(), POINT_RADIUS, POINT_RADIUS);
-            gc.fillOval(p.getX(), p.getY(), POINT_RADIUS, POINT_RADIUS);
+            gc.setStroke(Color.BLACK);
+            gc.strokeOval(p.getX()-POINT_RADIUS, p.getY()-POINT_RADIUS, 2*POINT_RADIUS, 2*POINT_RADIUS);
+            gc.fillOval(p.getX()-POINT_RADIUS, p.getY()-POINT_RADIUS, 2*POINT_RADIUS, 2*POINT_RADIUS);
             if (i != 0) {
                 Point2D p2 = points.get(i-1);
                 gc.setStroke(Color.LIGHTGREEN);
                 gc.strokeLine(p2.getX(), p2.getY(), p.getX(), p.getY());
             }
-
         }
         return true;
     }

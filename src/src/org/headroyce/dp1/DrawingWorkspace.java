@@ -28,12 +28,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.stage.Stage;
+import java.util.Stack;
 
 public class DrawingWorkspace extends BorderPane {
     private Canvas canvas;
     private LineTool lt;
     private GraphicsContext gc;
     private MODES mode;
+    private Stack lines;
 
     public static enum MODES {
         ALL_OFF,
@@ -56,11 +58,21 @@ public class DrawingWorkspace extends BorderPane {
         canvas.widthProperty().bind(center.widthProperty());
         canvas.heightProperty().bind(center.heightProperty());
 
-
         lt = new LineTool(canvas);
+        lines = new Stack<>();
+        lines.push(lt);
         VBox tools = new VBox();
 
-        Node ltButton = lt.renderTool();
+        Node endRouteButton = lt.renderTool("End Route");
+        endRouteButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if (evt.isPrimaryButtonDown()) {
+                    lt = new LineTool(canvas);
+                }
+            }
+        });
+        Node ltButton = lt.renderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
@@ -75,6 +87,7 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         tools.getChildren().add(ltButton);
+        tools.getChildren().add(endRouteButton);
 
         this.setRight(tools);
         this.setCenter(center);
@@ -104,15 +117,18 @@ public class DrawingWorkspace extends BorderPane {
         gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
 
 
-        // lt.renderTool();
 
+    }
+
+    public boolean line () {
+
+        return true;
     }
 
 
     public class mouseHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent evt) {
-
             System.err.println("HERE");
             if (mode == MODES.DRAWING_MODE) {
                 Point2D p = new Point2D(evt.getX(), evt.getY());
@@ -122,5 +138,4 @@ public class DrawingWorkspace extends BorderPane {
             }
         }
     }
-
 }
