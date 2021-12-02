@@ -36,6 +36,17 @@ public class LineTool {
         return toolGUI;
     }
 
+    public LList<Point2D> getPoints() {
+        return points;
+    }
+
+    public boolean undoPoint() {
+        points.remove(points.size()-1);
+        return true;
+    }
+
+
+
 
     /* public boolean wasButtonPressed() {
         return false;

@@ -73,8 +73,8 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
-        Node undoButton = lt.renderTool("Undo");
-        undoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+        Node undoRouteButton = lt.renderTool("Undo Route");
+        undoRouteButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
@@ -83,18 +83,33 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
-        /* Node clearButton = lt.renderTool("Clear");
+        Node clearButton = lt.renderTool("Clear");
         clearButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
                     for (int i = lines.size()-1; i >= 0; i--){
+                       // lines.get(i).getPoints().clearPoints();
                         lines.pop();
                     }
                     refreshScreen();
                 }
             }
-        });*/
+        });
+        Node undoPointButton = lt.renderTool("Undo Point");
+        undoPointButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
+                    LineTool last = lines.get(lines.size()-1);
+                    last.undoPoint();
+                    if (last.getPoints().size() == 0) {
+                        lines.pop();
+                    }
+                    refreshScreen();
+                }
+            }
+        });
         Node ltButton = lt.renderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -111,8 +126,9 @@ public class DrawingWorkspace extends BorderPane {
         });
         tools.getChildren().add(ltButton);
         tools.getChildren().add(endRouteButton);
-        tools.getChildren().add(undoButton);
-        // tools.getChildren().add(clearButton);
+        tools.getChildren().add(undoRouteButton);
+        tools.getChildren().add(undoPointButton);
+        tools.getChildren().add(clearButton);
 
         this.setRight(tools);
         this.setCenter(center);
