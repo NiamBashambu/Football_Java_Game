@@ -35,7 +35,7 @@ public class DrawingWorkspace extends BorderPane {
     private LineTool lt;
     private GraphicsContext gc;
     private MODES mode;
-    private Stack lines;
+    private Stack<LineTool> lines;
 
     public static enum MODES {
         ALL_OFF,
@@ -69,9 +69,32 @@ public class DrawingWorkspace extends BorderPane {
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown()) {
                     lt = new LineTool(canvas);
+                    lines.push(lt);
                 }
             }
         });
+        Node undoButton = lt.renderTool("Undo");
+        undoButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
+                    lines.pop();
+                    refreshScreen();
+                }
+            }
+        });
+        /* Node clearButton = lt.renderTool("Clear");
+        clearButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
+                    for (int i = lines.size()-1; i >= 0; i--){
+                        lines.pop();
+                    }
+                    refreshScreen();
+                }
+            }
+        });*/
         Node ltButton = lt.renderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -88,6 +111,8 @@ public class DrawingWorkspace extends BorderPane {
         });
         tools.getChildren().add(ltButton);
         tools.getChildren().add(endRouteButton);
+        tools.getChildren().add(undoButton);
+        // tools.getChildren().add(clearButton);
 
         this.setRight(tools);
         this.setCenter(center);
@@ -116,7 +141,9 @@ public class DrawingWorkspace extends BorderPane {
         gc.setLineWidth(4);
         gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
 
-
+        for (int i = 0; i < lines.size(); i++) {
+            lines.get(i).render(canvas);
+        }
 
     }
 
