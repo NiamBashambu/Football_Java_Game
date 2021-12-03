@@ -10,9 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import javafx.scene.shape.Line;
 import javafx.scene.Group;
@@ -124,11 +122,13 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+
         tools.getChildren().add(ltButton);
         tools.getChildren().add(endRouteButton);
-        tools.getChildren().add(undoRouteButton);
         tools.getChildren().add(undoPointButton);
+        tools.getChildren().add(undoRouteButton);
         tools.getChildren().add(clearButton);
+
 
         this.setRight(tools);
         this.setCenter(center);
