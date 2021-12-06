@@ -36,6 +36,10 @@ public class LineTool {
         return toolGUI;
     }
 
+    public void clear(){
+        points.clear();
+    }
+
     public LList<Point2D> getPoints() {
         return points;
     }
