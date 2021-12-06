@@ -121,20 +121,20 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //add player button
-      /*  Node addPlayerButton = lt.renderTool(("Add Player"));
+        Node addPlayerButton = lt.renderTool(("Add Player"));
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if(evt.isPrimaryButtonDown()){
-                    if(getMode() == MODES.DRAWING_MODE){
+                    if(getMode() != MODES.STAMP_MODE){
+                        setMode(MODES.STAMP_MODE);
+                    } else {
                         setMode(MODES.ALL_OFF);
-                    }else if(getMode() == MODES.ALL_OFF){
-                        setMode(MODES.DRAWING_MODE);
                     }
                 }
             }
         });
-       */
+
 
         tools.getChildren().add(ltButton);
         tools.getChildren().add(undoPointButton);

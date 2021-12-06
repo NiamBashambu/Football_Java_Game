@@ -10,11 +10,11 @@ public abstract class Sprite {
 
     public Node node;
 
+    private double x;
+    private double y;
 
-    public double vX = 0;
-
-
-    public double vY = 0;
+    private double vX = 0;
+    private double vY = 0;
 
 
 
