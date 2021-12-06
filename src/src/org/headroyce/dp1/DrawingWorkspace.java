@@ -61,16 +61,6 @@ public class DrawingWorkspace extends BorderPane {
         lines.push(lt);
         VBox tools = new VBox();
 
-        Node endRouteButton = lt.renderTool("End Route");
-        endRouteButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent evt) {
-                if (evt.isPrimaryButtonDown()) {
-                    lt = new LineTool(canvas);
-                    lines.push(lt);
-                }
-            }
-        });
         Node undoRouteButton = lt.renderTool("Undo Route");
         undoRouteButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -115,6 +105,8 @@ public class DrawingWorkspace extends BorderPane {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
                         setMode(MODES.ALL_OFF);
+                        lt = new LineTool(canvas);
+                        lines.push(lt);
                     } else if (getMode() == MODES.ALL_OFF) {
                         setMode(MODES.DRAWING_MODE);
                     }
@@ -124,7 +116,6 @@ public class DrawingWorkspace extends BorderPane {
         });
 
         tools.getChildren().add(ltButton);
-        tools.getChildren().add(endRouteButton);
         tools.getChildren().add(undoPointButton);
         tools.getChildren().add(undoRouteButton);
         tools.getChildren().add(clearButton);
