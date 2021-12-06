@@ -10,15 +10,25 @@ public abstract class Sprite {
 
     public Node node;
 
-
-    public double vX = 0;
-
-
-    public double vY = 0;
+    private double x;
+  private  double y;
+    private double vX = 0;
 
 
+    private double vY = 0;
 
-
+    public void setX(double newX){
+        this.x = x;
+    }
+    public void setY(double newY){
+        this.y = y;
+    }
+    public double getX() {
+        return x;
+    }
+    public double getY(){
+        return y;
+    }
 
     public Circle collisionBounds;
 
