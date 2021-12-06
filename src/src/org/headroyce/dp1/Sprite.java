@@ -11,14 +11,32 @@ public abstract class Sprite {
     public Node node;
 
     private double x;
+<<<<<<< HEAD
     private double y;
 
     private double vX = 0;
     private double vY = 0;
 
+=======
+  private  double y;
+    private double vX = 0;
+>>>>>>> e90be18ae42a31c44ce12482c8063a2ef2c0b4f8
 
 
+    private double vY = 0;
 
+    public void setX(double newX){
+        this.x = x;
+    }
+    public void setY(double newY){
+        this.y = y;
+    }
+    public double getX() {
+        return x;
+    }
+    public double getY(){
+        return y;
+    }
 
     public Circle collisionBounds;
 
