@@ -36,6 +36,10 @@ public class LList<T> implements Iterable<T>{
         return count;
     }
 
+    public void clear(){
+        this.head = null;
+    }
+
     /**
      * Add to the end of the linked list
      * @param data the data to add to the list

@@ -86,10 +86,9 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
-                    for (int i = lines.size()-1; i >= 0; i--){
-                       // lines.get(i).getPoints().clearPoints();
-                        lines.pop();
-                    }
+                    lines.clear();
+                    lt.clear();
+                    lines.push(lt);
                     refreshScreen();
                 }
             }
@@ -103,6 +102,7 @@ public class DrawingWorkspace extends BorderPane {
                     last.undoPoint();
                     if (last.getPoints().size() == 0) {
                         lines.pop();
+                        System.err.println("POP LINE");
                     }
                     refreshScreen();
                 }
