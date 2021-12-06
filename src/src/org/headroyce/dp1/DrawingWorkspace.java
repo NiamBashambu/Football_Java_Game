@@ -91,13 +91,16 @@ public class DrawingWorkspace extends BorderPane {
                     if (lines.get(lines.size()-1).getPoints().size() == 0) {
                         lines.pop();
                     }
-                    LineTool last = lines.get(lines.size()-1);
-                    last.undoPoint();
-                    if (last.getPoints().size() == 0) {
-                        lines.pop();
-                        System.err.println("POP LINE");
+                    LineTool last;
+                    if (!lines.isEmpty()) {
+                        last = lines.get(lines.size()-1);
+                        last.undoPoint();
+                        if (last.getPoints().size() == 0) {
+                            lines.pop();
+                            System.err.println("POP LINE");
+                        }
+                        refreshScreen();
                     }
-                    refreshScreen();
                 }
             }
         });
