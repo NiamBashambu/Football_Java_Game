@@ -19,11 +19,12 @@ public class Sprite {
 
     private Image img;
 
-    public Sprite(double x, double y, double vX, double vY) {
+    public Sprite(double x, double y, double vX, double vY, Image img) {
         this.x = x;
         this.y = y;
         this.vX = vX;
         this.vY = vY;
+        this.img = img;
     }
 
 
