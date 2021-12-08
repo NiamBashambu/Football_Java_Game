@@ -1,10 +1,16 @@
-  /*package org.headroyce.dp1;
+  package org.headroyce.dp1;
 
- public class OffensiveLineman extends Player {
+  import javafx.scene.image.Image;
 
-     public OffensiveLineman(){
+  public class OffensiveLineman extends Sprite {
+
+
+     public OffensiveLineman(double x, double y, Image img){
+         super(x,y,0,0,img);
+
+
+
 
 
      }
  }
-*/

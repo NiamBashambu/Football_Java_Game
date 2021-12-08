@@ -208,11 +208,11 @@ public class DrawingWorkspace extends BorderPane {
                     if (point != null) {
                         double x = evt.getX();
                         double y = evt.getX();
-                        if (x >= point.getX() &&
-                                x <= point.getX() + lines.get(i).getPointRadius()*2 &&
-                                y >= point.getY() &&
-                                y <= point.getX() + lines.get(i).getPointRadius()*2) {
-                            Sprite s = new Sprite(x, y, 0,0);
+                        if (x >= point.getX() - lines.get(i).getPointRadius() &&
+                                x <= point.getX() + lines.get(i).getPointRadius() &&
+                                y >= point.getY() - lines.get(i).getPointRadius()&&
+                                y <= point.getX() + lines.get(i).getPointRadius()) {
+                            Sprite s = new Sprite(x, y, 0,0,null);
                             System.out.println("sprite created");
 
                         }
