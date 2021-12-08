@@ -111,36 +111,40 @@ public class DrawingWorkspace extends BorderPane {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
                         setMode(MODES.ALL_OFF);
+
+                    } else if (getMode() != MODES.DRAWING_MODE) {
+                        setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                         lines.push(lt);
-                    } else if (getMode() == MODES.ALL_OFF) {
-                        setMode(MODES.DRAWING_MODE);
                     }
 
                 }
             }
         });
         //add player button
-      /*  Node addPlayerButton = lt.renderTool(("Add Player"));
+        Node addPlayerButton = lt.renderTool(("Add Player"));
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if(evt.isPrimaryButtonDown()){
-                    if(getMode() == MODES.DRAWING_MODE){
+                    if(getMode() != MODES.STAMP_MODE){
+                        if (getMode() == MODES.DRAWING_MODE) {
+
+                        }
+                        setMode(MODES.STAMP_MODE);
+                    } else {
                         setMode(MODES.ALL_OFF);
-                    }else if(getMode() == MODES.ALL_OFF){
-                        setMode(MODES.DRAWING_MODE);
                     }
                 }
             }
         });
-       */
+
 
         tools.getChildren().add(ltButton);
         tools.getChildren().add(undoPointButton);
         tools.getChildren().add(undoRouteButton);
         tools.getChildren().add(clearButton);
-     //   tools.getChildren().add(addPlayerButton);
+        tools.getChildren().add(addPlayerButton);
 
 
         this.setRight(tools);
@@ -191,6 +195,33 @@ public class DrawingWorkspace extends BorderPane {
                 lt.addPoint(p);
                 lt.render(canvas);
                 System.out.println("p");
+            }
+            if (mode == MODES.STAMP_MODE) {
+                // try to make big oh smaller
+                for (int i = 0; i < lines.size(); i++) {
+                    LList<Point2D> pts = lines.get(i).getPoints();
+
+                    Point2D point = null;
+                    if (pts.size() != 0) {
+                        point = pts.get(0);
+                    }
+                    if (point != null) {
+                        double x = evt.getX();
+                        double y = evt.getX();
+                        if (x >= point.getX() &&
+                                x <= point.getX() + lines.get(i).getPointRadius()*2 &&
+                                y >= point.getY() &&
+                                y <= point.getX() + lines.get(i).getPointRadius()*2) {
+                            Sprite s = new Sprite(x, y, 0,0);
+                            System.out.println("sprite created");
+
+                        }
+                    }
+
+
+
+                }
+                System.out.println("s");
             }
         }
     }

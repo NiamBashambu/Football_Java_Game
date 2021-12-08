@@ -2,20 +2,30 @@ package org.headroyce.dp1;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
 
-public abstract class Sprite {
+public class Sprite {
 
 
     public Node node;
 
     private double x;
-  private  double y;
-    private double vX = 0;
+    private double y;
 
+    private double vX;
+    private double vY;
 
-    private double vY = 0;
+    private Image img;
+
+    public Sprite(double x, double y, double vX, double vY) {
+        this.x = x;
+        this.y = y;
+        this.vX = vX;
+        this.vY = vY;
+    }
+
 
     public void setX(double newX){
         this.x = x;
@@ -33,7 +43,9 @@ public abstract class Sprite {
     public Circle collisionBounds;
 
 
-    public abstract void update();
+    public void update() {
+
+    }
 
 
     public boolean collide(Sprite other) {

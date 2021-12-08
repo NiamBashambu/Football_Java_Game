@@ -36,6 +36,10 @@ public class LineTool {
         return toolGUI;
     }
 
+    public int getPointRadius() {
+        return POINT_RADIUS;
+    }
+
     public void clear(){
         points.clear();
     }
@@ -63,10 +67,13 @@ public class LineTool {
     public boolean render (Canvas c) {
 
         GraphicsContext gc =  c.getGraphicsContext2D();
-        gc.setFill(Color.WHITE);
+        gc.setFill(Color.RED);
 
         for (int i = 0; i < points.size(); i++) {
             Point2D p = points.get(i);
+            if (i != 0) {
+                gc.setFill(Color.WHITE);
+            }
             gc.setStroke(Color.BLACK);
             gc.strokeOval(p.getX()-POINT_RADIUS, p.getY()-POINT_RADIUS, 2*POINT_RADIUS, 2*POINT_RADIUS);
             gc.fillOval(p.getX()-POINT_RADIUS, p.getY()-POINT_RADIUS, 2*POINT_RADIUS, 2*POINT_RADIUS);
