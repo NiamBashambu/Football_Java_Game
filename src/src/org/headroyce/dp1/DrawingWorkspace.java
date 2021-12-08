@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -212,7 +213,7 @@ public class DrawingWorkspace extends BorderPane {
                                 x <= point.getX() + lines.get(i).getPointRadius() &&
                                 y >= point.getY() - lines.get(i).getPointRadius() &&
                                 y <= point.getX() + lines.get(i).getPointRadius()) {
-                            Sprite s = new Sprite(x, y, 0,0);
+                            Sprite s = new OffensiveLineman(x, y);
                             System.out.println("sprite created");
 
                         }
