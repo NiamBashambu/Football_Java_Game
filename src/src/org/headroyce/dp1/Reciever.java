@@ -1,8 +1,9 @@
-/*package org.headroyce.dp1;
+package org.headroyce.dp1;
 
-public class Reciever extends Player{
-    public Reciever(){
+import javafx.scene.image.Image;
 
+public class Reciever extends Sprite{
+    public Reciever(double x , double y, double vX, double vY, Image img){
+        super(x,y,0,0,img);
     }
 }
-*/
