@@ -97,7 +97,7 @@ public class Sprite {
         return (distance < minDist);
     }
 
-    public void handleDeath(MainWorkspace gameWorld) {
+    public void removeSprite(MainWorkspace gameWorld) {
         gameWorld.getSpriteManager().addSpritesToBeRemoved(this);
     }
 }

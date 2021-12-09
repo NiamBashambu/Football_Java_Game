@@ -41,6 +41,7 @@ public abstract class MainWorkspace {
     }
 
 
+
     protected final void buildAndSetGameLoop() {
 
         final Duration oneFrameAmt = Duration.millis(1000 / (float) getFramesPerSecond());

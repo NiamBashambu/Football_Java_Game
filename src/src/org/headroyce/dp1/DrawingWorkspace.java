@@ -290,6 +290,7 @@ public class DrawingWorkspace extends BorderPane {
                             players.push(receiver);
                             System.out.println("sprite created");
                             System.out.println(MainWorkspace.FramesPerSecond());
+
                             refreshScreen();
 
                         }
