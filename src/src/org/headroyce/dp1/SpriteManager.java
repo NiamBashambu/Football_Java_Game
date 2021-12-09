@@ -2,7 +2,7 @@ package org.headroyce.dp1;
 
 import java.util.*;
 
-
+//class to manage the sprites and check collisions
 public class SpriteManager {
 
     private final static List<Sprite> GAME_ACTORS = new ArrayList<>();
@@ -31,7 +31,7 @@ public class SpriteManager {
         return CLEAN_UP_SPRITES;
     }
 
-
+//knowing how and when to remove the sprites
     public void addSpritesToBeRemoved(Sprite... sprites) {
         if (sprites.length > 1) {
             CLEAN_UP_SPRITES.addAll(Arrays.asList((Sprite[]) sprites));
@@ -40,7 +40,7 @@ public class SpriteManager {
         }
     }
 
-
+//check collisions stuff
     public List<Sprite> getCollisionsToCheck() {
         return CHECK_COLLISION_LIST;
     }

@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-
+//class sprite that is the main building blocks for each player
 public class Sprite {
 
 
@@ -77,7 +77,7 @@ public class Sprite {
 
     }
 
-
+//collision class for the sprites
     public boolean collide(Sprite other) {
 
         if (collisionBounds == null || other.collisionBounds == null) {

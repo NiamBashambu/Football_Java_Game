@@ -57,7 +57,7 @@ public class DrawingWorkspace extends BorderPane {
         center.getChildren().add(canvas);
         canvas.widthProperty().bind(center.widthProperty());
         canvas.heightProperty().bind(center.heightProperty());
-
+//creating the lines and players and putting them in stacks
         lt = new LineTool(canvas);
         lines = new Stack<>();
         lines.push(lt);
@@ -65,6 +65,7 @@ public class DrawingWorkspace extends BorderPane {
 
         this.players = new Stack<>();
 
+//undo route button
         Node undoRouteButton = lt.renderTool("Undo Route");
         undoRouteButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -85,6 +86,7 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+        //clear button
         Node clearButton = lt.renderTool("Clear");
         clearButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -100,6 +102,7 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+        //undo point button
         Node undoPointButton = lt.renderTool("Undo Point");
         undoPointButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -134,6 +137,7 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+        //creating route button
         Node ltButton = lt.renderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -169,6 +173,7 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+        //undo player button
         Node undoPlayerButton = lt.renderTool(("Undo Player"));
         undoPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -247,7 +252,7 @@ public class DrawingWorkspace extends BorderPane {
         return true;
     }
 
-
+//putting the players on the create route
     public class mouseHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent evt) {
@@ -284,6 +289,7 @@ public class DrawingWorkspace extends BorderPane {
                             Receiver receiver = new Receiver(point.getX() - 2*lines.get(i).getPointRadius(), point.getY() - 2*lines.get(i).getPointRadius(), 0,0);
                             players.push(receiver);
                             System.out.println("sprite created");
+                            System.out.println(MainWorkspace.FramesPerSecond());
                             refreshScreen();
 
                         }

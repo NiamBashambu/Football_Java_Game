@@ -1,7 +1,6 @@
 package org.headroyce.dp1;
 
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 
@@ -12,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
+//thing to manager the game timer and the sprite manager and sprites
 public abstract class MainWorkspace {
 
 
@@ -51,7 +50,7 @@ public abstract class MainWorkspace {
                     @Override
                     public void handle(ActionEvent event) {
 
-                        // update actors
+                        // update sprites
                         updateSprites();
 
                         // check for collision
@@ -83,7 +82,7 @@ public abstract class MainWorkspace {
     protected void handleUpdate(Sprite sprite) {
     }
 
-
+//check collisions for sprites
     protected void checkCollisions() {
         // check other sprite's collisions
         spriteManager.resetCollisionsToCheck();
@@ -112,8 +111,12 @@ public abstract class MainWorkspace {
     }
 
 
-    protected int getFramesPerSecond() {
-        return framesPerSecond;
+   public  int getFramesPerSecond() {
+        return FramesPerSecond();
+    }
+
+    public static int FramesPerSecond() {
+        return 60;
     }
 
 
@@ -121,7 +124,7 @@ public abstract class MainWorkspace {
         return windowTitle;
     }
 
-
+//get the game timer stuff
     protected static Timeline getGameLoop() {
         return gameLoop;
     }
