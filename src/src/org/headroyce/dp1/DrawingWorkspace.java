@@ -89,11 +89,13 @@ public class DrawingWorkspace extends BorderPane {
         clearButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
-                if (evt.isPrimaryButtonDown() && !lines.isEmpty() && !players.isEmpty()) {
+                if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
                     lines.clear();
                     lt.clear();
                     lines.push(lt);
-                    players.clear();
+                    if (!players.isEmpty()) {
+                        players.clear();
+                    }
                     refreshScreen();
                 }
             }
