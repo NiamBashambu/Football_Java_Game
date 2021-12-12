@@ -1,32 +1,17 @@
 package org.headroyce.dp1;
 
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-
-import javafx.scene.shape.Line;
-import javafx.scene.Group;
-import javafx.scene.effect.ColorInput;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javafx.stage.Stage;
 import java.util.Stack;
 
 public class DrawingWorkspace extends BorderPane {
@@ -65,7 +50,8 @@ public class DrawingWorkspace extends BorderPane {
 
         this.players = new Stack<>();
 
-//undo route button
+        //undo route button
+        // removes the last route created and any player attached to it
         Node undoRouteButton = lt.renderTool("Undo Route");
         undoRouteButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -80,13 +66,18 @@ public class DrawingWorkspace extends BorderPane {
                             }
                         }
                     }
-
+                    System.out.println(lines);
                     lines.pop();
+                    lt.clear();
                     refreshScreen();
+                } else if (evt.isPrimaryButtonDown()) {
+                    refreshScreen();
+                    lt.clear();
                 }
             }
         });
         //clear button
+        // removes all players, points, and lines
         Node clearButton = lt.renderTool("Clear");
         clearButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -103,6 +94,7 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //undo point button
+        // removes the last point created and any player attached to it
         Node undoPointButton = lt.renderTool("Undo Point");
         undoPointButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
@@ -120,6 +112,9 @@ public class DrawingWorkspace extends BorderPane {
                                 System.out.println(last.getPoints().get(0).getX());
                                 System.out.println(players.get(i).getY());
                                 System.out.println(last.getPoints().get(0).getY());*/
+                                if (players.size() == 0) {
+                                    break;
+                                }
                                 if (players.get(i).getX() + 2*lt.getPointRadius() == last.getPoints().get(0).getX() &&
                                         players.get(i).getY() + 2*lt.getPointRadius() == last.getPoints().get(0).getY()) {
                                     players.remove(i);
@@ -133,8 +128,12 @@ public class DrawingWorkspace extends BorderPane {
                             System.err.println("POP LINE");
                         }
                         refreshScreen();
+                        // FIND OUT WHAT'S GOING ON HERE ... IT STOPS WORKING AFTER 2 TIMES
                     }
-                }
+                } /* else if (evt.isPrimaryButtonDown()) {
+                    refreshScreen();
+                    //lt.undoPoint();
+                }*/
             }
         });
         //creating route button
@@ -156,7 +155,7 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //add player button
-        Node addPlayerButton = lt.renderTool(("Add Player"));
+        Node addPlayerButton = lt.renderTool("Add Player");
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
@@ -174,7 +173,8 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //undo player button
-        Node undoPlayerButton = lt.renderTool(("Undo Player"));
+        // removes the last player created
+        Node undoPlayerButton = lt.renderTool("Undo Player");
         undoPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
@@ -188,6 +188,31 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
 
+        Node runPlayButton = lt.renderTool("Run Play");
+        runPlayButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                for (int i = 0; i < players.size(); i++) {
+                    players.get(i).getST().play();
+                    //players.get(i).getTimeline().play();
+                }
+            }
+        });
+        Node resetPlayButton = lt.renderTool("Reset Play");
+        resetPlayButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                for (int i = 0; i < players.size(); i++) {
+                    Sprite s = players.get(i);
+                    s.setX(s.getPrevX());
+                    s.setY(s.getPrevY());
+                }
+                refreshScreen();
+            }
+        });
+
+
+
 
         tools.getChildren().add(ltButton);
         tools.getChildren().add(undoPointButton);
@@ -195,6 +220,8 @@ public class DrawingWorkspace extends BorderPane {
         tools.getChildren().add(clearButton);
         tools.getChildren().add(addPlayerButton);
         tools.getChildren().add(undoPlayerButton);
+        tools.getChildren().add(runPlayButton);
+        tools.getChildren().add(resetPlayButton);
 
         this.setRight(tools);
         this.setCenter(center);
@@ -252,7 +279,7 @@ public class DrawingWorkspace extends BorderPane {
         return true;
     }
 
-//putting the players on the create route
+//putting the players on the created route
     public class mouseHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent evt) {
@@ -286,7 +313,8 @@ public class DrawingWorkspace extends BorderPane {
                                 y >= point.getY() - lines.get(i).getPointRadius() &&
                                 y <= point.getY() + lines.get(i).getPointRadius() &&
                                 isSpotVacant(point)) {
-                            Receiver receiver = new Receiver(point.getX() - 2*lines.get(i).getPointRadius(), point.getY() - 2*lines.get(i).getPointRadius(), 0,0);
+                            Receiver receiver = new Receiver(point.getX() - 2*lines.get(i).getPointRadius(), point.getY() - 2*lines.get(i).getPointRadius(), 1,1);
+                            receiver.addRoute(pts);
                             players.push(receiver);
                             System.out.println("sprite created");
                             System.out.println(MainWorkspace.FramesPerSecond());

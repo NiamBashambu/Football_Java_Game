@@ -1,5 +1,13 @@
 package org.headroyce.dp1;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
+import javafx.beans.value.WritableValue;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -7,6 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 
 //class sprite that is the main building blocks for each player
 public class Sprite {
@@ -17,6 +26,9 @@ public class Sprite {
     private double x;
     private double y;
 
+    private double prevX;
+    private double prevY;
+
     private double vX;
     private double vY;
 
@@ -25,14 +37,26 @@ public class Sprite {
     private double h;
     private double w;
 
-    public Sprite(double x, double y, double vX, double vY, double w, double h, String type) {
+    //private Timeline timeline;
+    private SequentialTransition st;
+    private Canvas canvas;
+
+    public final Double pointRadius;
+
+
+    public Sprite(double x, double y, double vX, double vY, double w, double h, String type, double prevX, double prevY) {
         this.x = x;
         this.y = y;
+        this.prevX = prevX;
+        this.prevY = prevY;
         this.vX = vX;
         this.vY = vY;
         this.type = type;
         this.w = w;
         this.h = h;
+        // this.timeline = new Timeline();
+        this.st = new SequentialTransition();
+        this.pointRadius = 5.0;
     }
 
     public void display(Canvas c) {
@@ -42,8 +66,67 @@ public class Sprite {
         gc.fillRect(x, y, w, h);
         gc.setStroke(Color.WHITE);
         gc.strokeRect(x, y, w, h);
+
+
+        this.canvas = c;
     }
 
+    public SequentialTransition getST() {
+        return st;
+    }
+
+    public void addRoute(LList<Point2D> points) {
+        for (int i = 1; i < points.size(); i++) {
+            Point2D pt = points.get(i);
+            Point2D prev = points.get(i-1);
+            Double ptX = pt.getX();
+            Double ptY = pt.getY();
+            Double prevX = prev.getX();
+            Double prevY = prev.getY();
+            Double xDiff = ptX - prevX;
+            Double yDiff = ptY - prevY;
+            Double dist = Math.sqrt((xDiff*xDiff) + (yDiff*yDiff));
+            WritableValue<Double> xWritable = new WritableValue<Double>() {
+                @Override
+                public Double getValue() {
+                    return x;
+                }
+
+                @Override
+                public void setValue(Double aDouble) {
+                    x = aDouble;
+                    display(canvas);
+                }
+            };
+            WritableValue<Double> yWritable = new WritableValue<Double>() {
+                @Override
+                public Double getValue() {
+                    return y;
+                }
+
+                @Override
+                public void setValue(Double aDouble) {
+                    y = aDouble;
+                    display(canvas);
+                }
+            };
+            // Double endValue = 0.0;
+            KeyValue kfX = new KeyValue(xWritable, ptX - 2*pointRadius);
+            KeyValue kfY = new KeyValue(yWritable, ptY - 2*pointRadius);
+            EventHandler onFinished = new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    System.out.println("KeyFrame Happened");
+                }
+            };
+            Duration time = new Duration(10*dist/(Math.sqrt(vX*vX + vY*vY)));
+            Timeline tl = new Timeline();
+            tl.getKeyFrames().add(new KeyFrame(time, onFinished, kfX, kfY));
+            st.getChildren().add(tl);
+        }
+
+
+    }
 
     public void setX(double newX){
         this.x = newX;
@@ -56,6 +139,18 @@ public class Sprite {
     }
     public double getY(){
         return y;
+    }
+    public double getPrevX() {
+        return prevX;
+    }
+    public double getPrevY(){
+        return prevY;
+    }
+    public void setPrevX(double newPrevX){
+        this.prevX = newPrevX;
+    }
+    public void setPrevY(double newPrevY){
+        this.prevY = newPrevY;
     }
     public void setH(double newH){
         this.h = newH;
@@ -84,7 +179,7 @@ public class Sprite {
             return false;
         }
 
-        // determine it's size
+        // determine its size
         Circle otherSphere = other.collisionBounds;
         Circle thisSphere = collisionBounds;
         Point2D otherCenter = otherSphere.localToScene(otherSphere.getCenterX(), otherSphere.getCenterY());

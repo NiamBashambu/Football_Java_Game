@@ -49,7 +49,9 @@ public class LineTool {
     }
 
     public boolean undoPoint() {
-        points.remove(points.size()-1);
+        if (points.size() != 0){
+            points.remove(points.size()-1);
+        }
         return true;
     }
 
