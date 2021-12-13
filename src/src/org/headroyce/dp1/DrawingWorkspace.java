@@ -67,8 +67,15 @@ public class DrawingWorkspace extends BorderPane {
                             }
                         }
                     }*/
-                    lt = lines.pop();
+
+                    lines.get(lines.size()-1).removePlayer();
+                    if (mode != MODES.DRAWING_MODE) {
+                        lines.pop();
+                    } else {
+                        lt = lines.pop();
+                    }
                     refreshScreen();
+
                 } else if (evt.isPrimaryButtonDown()) {
                     lt.clear();
                     refreshScreen();
@@ -103,6 +110,9 @@ public class DrawingWorkspace extends BorderPane {
                     }
 
                     lt.undoPoint();
+                    if (lt.getPoints().size() == 0 && !lines.isEmpty()) {
+                        lt = lines.pop();
+                    }
 
                 } /* else if (evt.isPrimaryButtonDown()) {
                     refreshScreen();
@@ -139,9 +149,8 @@ public class DrawingWorkspace extends BorderPane {
             public void handle(MouseEvent evt) {
                 if(evt.isPrimaryButtonDown()){
                     if(getMode() != MODES.STAMP_MODE){
-                        // find out why I made this if statement
                         if (getMode() == MODES.DRAWING_MODE) {
-
+                            lines.push(lt);
                         }
                         setMode(MODES.STAMP_MODE);
                     } else {
@@ -251,22 +260,14 @@ public class DrawingWorkspace extends BorderPane {
     }
 
     // try to make big oh smaller
-    public boolean isSpotVacant (Point2D p) {
+    public boolean isSpotVacant (LineTool lineTool) {
         if (players.size() == 0) {
             return true;
         }
-        for (int i = 0; i < players.size(); i++) {
-            System.out.println(p.getX() + ", " + p.getY());
-            double playerX = players.get(i).getX() + 2*lines.get(0).getPointRadius();
-            double playerY = players.get(i).getY() + 2*lines.get(0).getPointRadius();
-            System.out.println((playerX) + ", " + (playerY));
-
-            if (p.getX() == playerX && p.getY() == playerY) {
-                System.out.println("occupied");
-                return false;
-            }
+        if (lineTool.isRouteVacant()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 //putting the players on the created route
@@ -283,7 +284,8 @@ public class DrawingWorkspace extends BorderPane {
             if (mode == MODES.STAMP_MODE) {
                 // try to make big oh smaller
                 for (int i = 0; i < lines.size(); i++) {
-                    LList<Point2D> pts = lines.get(i).getPoints();
+                    LineTool current = lines.get(i);
+                    LList<Point2D> pts = current.getPoints();
 
                     Point2D point = null;
                     if (pts.size() != 0) {
@@ -298,18 +300,20 @@ public class DrawingWorkspace extends BorderPane {
                         System.out.println((y) + " and " + (point.getY() - lines.get(i).getPointRadius()));
                         System.out.println((y) + " and " + (point.getY() + lines.get(i).getPointRadius()));
 
-                       if (x >= point.getX() - lines.get(i).getPointRadius() &&
-                                x <= point.getX() + lines.get(i).getPointRadius() &&
-                                y >= point.getY() - lines.get(i).getPointRadius() &&
-                                y <= point.getY() + lines.get(i).getPointRadius() &&
-                                isSpotVacant(point)) {
-                            Receiver receiver = new Receiver(point.getX() - 2*lines.get(i).getPointRadius(), point.getY() - 2*lines.get(i).getPointRadius(), 1,1, DrawingWorkspace.this);
-                            receiver.addRoute(pts);
-                            players.push(receiver);
-                            System.out.println("sprite created");
-                            System.out.println(MainWorkspace.FramesPerSecond());
-                            refreshScreen();
-
+                        System.out.println(isSpotVacant(current));
+                       if (x >= point.getX() - current.getPointRadius() &&
+                                x <= point.getX() + current.getPointRadius() &&
+                                y >= point.getY() - current.getPointRadius() &&
+                                y <= point.getY() + current.getPointRadius()) {
+                            if (isSpotVacant(current)) {
+                                System.out.println("SPOT IS VACANT");
+                                Receiver receiver = new Receiver(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
+                                receiver.addRoute(pts);
+                                players.push(receiver);
+                                System.out.println("sprite created");
+                                System.out.println(MainWorkspace.FramesPerSecond());
+                                refreshScreen();
+                            }
                         }
                     }
 

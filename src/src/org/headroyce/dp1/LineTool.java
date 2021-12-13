@@ -18,6 +18,8 @@ public class LineTool {
 
     private Canvas c;
 
+    private Sprite sprite;
+
 
     public LineTool(Canvas c){
         // setMode("draw");
@@ -38,6 +40,19 @@ public class LineTool {
 
     public void clear(){
         points.clear();
+    }
+
+    public void addPlayer(Sprite s) {
+        sprite = s;
+    }
+    public void removePlayer() {
+        sprite = null;
+    }
+    public boolean isRouteVacant() {
+        if (sprite == null) {
+            return true;
+        }
+        return false;
     }
 
     public LList<Point2D> getPoints() {
