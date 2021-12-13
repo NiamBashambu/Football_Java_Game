@@ -1,6 +1,7 @@
 package org.headroyce.dp1;
 
-import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -21,6 +22,7 @@ public class DrawingWorkspace extends BorderPane {
     private MODES mode;
     private Stack<LineTool> lines;
     private Stack<Sprite> players;
+
 
     public static enum MODES {
         ALL_OFF,
@@ -45,7 +47,6 @@ public class DrawingWorkspace extends BorderPane {
 //creating the lines and players and putting them in stacks
         lt = new LineTool(canvas);
         lines = new Stack<>();
-        lines.push(lt);
         VBox tools = new VBox();
 
         this.players = new Stack<>();
@@ -57,7 +58,7 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
-                    if (!players.isEmpty()) {
+                    /* if (!players.isEmpty()) {
                         for (int i = 0; i < players.size(); i++) {
                             Sprite s = players.get(i);
                             if (s.getX() + 2*lt.getPointRadius() == lines.get(lines.size() - 1).getPoints().get(0).getX() &&
@@ -65,14 +66,12 @@ public class DrawingWorkspace extends BorderPane {
                                 players.remove(i);
                             }
                         }
-                    }
-                    System.out.println(lines);
-                    lines.pop();
-                    lt.clear();
+                    }*/
+                    lt = lines.pop();
                     refreshScreen();
                 } else if (evt.isPrimaryButtonDown()) {
-                    refreshScreen();
                     lt.clear();
+                    refreshScreen();
                 }
             }
         });
@@ -85,7 +84,6 @@ public class DrawingWorkspace extends BorderPane {
                 if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
                     lines.clear();
                     lt.clear();
-                    lines.push(lt);
                     if (!players.isEmpty()) {
                         players.clear();
                     }
@@ -99,41 +97,19 @@ public class DrawingWorkspace extends BorderPane {
         undoPointButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
-                if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
-                    if (lines.get(lines.size()-1).getPoints().size() == 0) {
-                        lines.pop();
+                if (evt.isPrimaryButtonDown()) {
+                    if (lt.getPoints().size() == 0 && !lines.isEmpty()) {
+                        lt = lines.pop();
                     }
-                    LineTool last;
-                    if (!lines.isEmpty()) {
-                        last = lines.get(lines.size()-1);
-                        if (last.getPoints().size() == 1) {
-                            for (int i = 0; i < players.size(); i++) {
-                                /* System.out.println(players.get(i).getX());
-                                System.out.println(last.getPoints().get(0).getX());
-                                System.out.println(players.get(i).getY());
-                                System.out.println(last.getPoints().get(0).getY());*/
-                                if (players.size() == 0) {
-                                    break;
-                                }
-                                if (players.get(i).getX() + 2*lt.getPointRadius() == last.getPoints().get(0).getX() &&
-                                        players.get(i).getY() + 2*lt.getPointRadius() == last.getPoints().get(0).getY()) {
-                                    players.remove(i);
-                                }
-                            }
-                        }
-                        last.undoPoint();
-                        if (last.getPoints().size() == 0) {
 
-                            lines.pop();
-                            System.err.println("POP LINE");
-                        }
-                        refreshScreen();
-                        // FIND OUT WHAT'S GOING ON HERE ... IT STOPS WORKING AFTER 2 TIMES
-                    }
+                    lt.undoPoint();
+
                 } /* else if (evt.isPrimaryButtonDown()) {
                     refreshScreen();
                     //lt.undoPoint();
                 }*/
+
+                refreshScreen();
             }
         });
         //creating route button
@@ -143,12 +119,14 @@ public class DrawingWorkspace extends BorderPane {
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
+                        if (lt.getPoints().size() != 0) {
+                            lines.push(lt);
+                        }
                         setMode(MODES.ALL_OFF);
 
                     } else if (getMode() != MODES.DRAWING_MODE) {
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
-                        lines.push(lt);
                     }
 
                 }
@@ -194,7 +172,6 @@ public class DrawingWorkspace extends BorderPane {
             public void handle(MouseEvent mouseEvent) {
                 for (int i = 0; i < players.size(); i++) {
                     players.get(i).getST().play();
-                    //players.get(i).getTimeline().play();
                 }
             }
         });
@@ -239,6 +216,17 @@ public class DrawingWorkspace extends BorderPane {
         return mode;
     }
 
+    public GraphicsContext getGC() {
+        return gc;
+    }
+
+    public Stack<LineTool> getLines() {
+        return lines;
+    }
+    public Stack<Sprite> getPlayers() {
+        return players;
+    }
+
     public void refreshScreen() {
 
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -250,6 +238,8 @@ public class DrawingWorkspace extends BorderPane {
         gc.setLineWidth(4);
         gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
 
+
+        lt.render(canvas);
         for (int i = 0; i < lines.size(); i++) {
             lines.get(i).render(canvas);
         }
@@ -313,7 +303,7 @@ public class DrawingWorkspace extends BorderPane {
                                 y >= point.getY() - lines.get(i).getPointRadius() &&
                                 y <= point.getY() + lines.get(i).getPointRadius() &&
                                 isSpotVacant(point)) {
-                            Receiver receiver = new Receiver(point.getX() - 2*lines.get(i).getPointRadius(), point.getY() - 2*lines.get(i).getPointRadius(), 1,1);
+                            Receiver receiver = new Receiver(point.getX() - 2*lines.get(i).getPointRadius(), point.getY() - 2*lines.get(i).getPointRadius(), 1,1, DrawingWorkspace.this);
                             receiver.addRoute(pts);
                             players.push(receiver);
                             System.out.println("sprite created");

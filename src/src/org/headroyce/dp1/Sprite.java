@@ -6,16 +6,16 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.beans.value.WritableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+
+import java.util.Stack;
 
 //class sprite that is the main building blocks for each player
 public class Sprite {
@@ -43,8 +43,10 @@ public class Sprite {
 
     public final Double pointRadius;
 
+    private DrawingWorkspace dw;
 
-    public Sprite(double x, double y, double vX, double vY, double w, double h, String type, double prevX, double prevY) {
+
+    public Sprite(double x, double y, double vX, double vY, double w, double h, String type, double prevX, double prevY, DrawingWorkspace dw) {
         this.x = x;
         this.y = y;
         this.prevX = prevX;
@@ -57,10 +59,34 @@ public class Sprite {
         // this.timeline = new Timeline();
         this.st = new SequentialTransition();
         this.pointRadius = 5.0;
+
+        this.dw = dw;
     }
 
     public void display(Canvas c) {
         GraphicsContext gc = c.getGraphicsContext2D();
+
+        /* Stack<LineTool> lines =
+
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setFill(Color.GREEN);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(4);
+        gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
+
+        for (int i = 0; i < lines.size(); i++) {
+            lines.get(i).render(canvas);
+        }
+
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).display(canvas);
+        }*/
+        /* gc.clearRect(prevX, prevY, w, h);
+        gc.setFill(Color.GREEN);
+        gc.fillRect(prevX, prevY, w, h);*/
 
         gc.setFill(Color.BLUE);
         gc.fillRect(x, y, w, h);
@@ -94,8 +120,10 @@ public class Sprite {
 
                 @Override
                 public void setValue(Double aDouble) {
+                    // setPrevX(x);
                     x = aDouble;
-                    display(canvas);
+                    // display(canvas);
+                    dw.refreshScreen();
                 }
             };
             WritableValue<Double> yWritable = new WritableValue<Double>() {
@@ -106,16 +134,19 @@ public class Sprite {
 
                 @Override
                 public void setValue(Double aDouble) {
+                    // setPrevY(y);
                     y = aDouble;
-                    display(canvas);
+                    // display(canvas);
+                    dw.refreshScreen();
                 }
             };
             // Double endValue = 0.0;
             KeyValue kfX = new KeyValue(xWritable, ptX - 2*pointRadius);
             KeyValue kfY = new KeyValue(yWritable, ptY - 2*pointRadius);
-            EventHandler onFinished = new EventHandler<ActionEvent>() {
+            EventHandler<ActionEvent> onFinished = new EventHandler<>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    //display(canvas);
                     System.out.println("KeyFrame Happened");
                 }
             };
