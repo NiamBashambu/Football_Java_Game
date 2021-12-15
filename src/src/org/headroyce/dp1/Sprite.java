@@ -93,6 +93,7 @@ public class Sprite {
         gc.setStroke(Color.WHITE);
         gc.strokeRect(x, y, w, h);
 
+        System.err.println("PLAYER REMDER");
 
         this.canvas = c;
     }

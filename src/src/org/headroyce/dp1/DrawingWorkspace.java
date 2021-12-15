@@ -68,13 +68,22 @@ public class DrawingWorkspace extends BorderPane {
                         }
                     }*/
 
-                    lines.get(lines.size()-1).removePlayer();
-                    if (mode != MODES.DRAWING_MODE) {
+
+
+                    if (getMode() != MODES.DRAWING_MODE) {
+                        // lines.get(lines.size()-1).removePlayer();
+                        System.out.println(lines.size());
+                        lines.get(lines.size()-1).removePlayer();
                         lines.pop();
+                        System.out.println(lines.size());
+                        refreshScreen();
                     } else {
+                        // lt.removePlayer();
+                        lt.removePlayer();
+                        // fix issue with last player not going away
                         lt = lines.pop();
+                        refreshScreen();
                     }
-                    refreshScreen();
 
                 } else if (evt.isPrimaryButtonDown()) {
                     lt.clear();
@@ -88,12 +97,15 @@ public class DrawingWorkspace extends BorderPane {
         clearButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
-                if (evt.isPrimaryButtonDown() && !lines.isEmpty()) {
-                    lines.clear();
-                    lt.clear();
-                    if (!players.isEmpty()) {
-                        players.clear();
+                if (evt.isPrimaryButtonDown()) {
+                    if (!lines.isEmpty()) {
+                        for (int i = 0; i < lines.size(); i++){
+                            lines.get(i).removePlayer();
+                        }
+                        lines.clear();
                     }
+                    lt.removePlayer();
+                    lt.clear();
                     refreshScreen();
                 }
             }
@@ -105,21 +117,33 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown()) {
-                    if (lt.getPoints().size() == 0 && !lines.isEmpty()) {
-                        lt = lines.pop();
-                    }
+                    if (getMode() == MODES.DRAWING_MODE) {
 
-                    lt.undoPoint();
-                    if (lt.getPoints().size() == 0 && !lines.isEmpty()) {
-                        lt = lines.pop();
-                    }
+                            if (lt.getPoints().size() == 1) {
+                                lt.removePlayer();
+                            }
+                            if (lt.getPoints().size() == 0) {
+                                if (!lines.isEmpty()) {
+                                    lt = lines.pop();
+                                }
+                            }
+                                lt.undoPoint();
 
-                } /* else if (evt.isPrimaryButtonDown()) {
+                    } else {
+                        if (!lines.isEmpty()) {
+                            if (lines.get(lines.size()-1).getPoints().size() == 1) {
+                                lines.get(lines.size()-1).removePlayer();
+                            }
+                            if (lines.get(lines.size()-1).getPoints().size() == 0) {
+                                lt = lines.pop();
+                            }
+                            if (!lines.isEmpty()) {
+                                lines.get(lines.size()-1).undoPoint();
+                            }
+                        }
+                    }
                     refreshScreen();
-                    //lt.undoPoint();
-                }*/
-
-                refreshScreen();
+                }
             }
         });
         //creating route button
@@ -131,6 +155,8 @@ public class DrawingWorkspace extends BorderPane {
                     if (getMode() == MODES.DRAWING_MODE) {
                         if (lt.getPoints().size() != 0) {
                             lines.push(lt);
+                            System.out.println(lines.size());
+                            //lt.clear();
                         }
                         setMode(MODES.ALL_OFF);
 
@@ -166,11 +192,10 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(MouseEvent evt) {
                 if(evt.isPrimaryButtonDown()){
-                    if (!players.isEmpty()) {
-                        players.pop();
+                    if (!lines.isEmpty()) {
+                        lines.get(lines.size()-1).removePlayer();
                         refreshScreen();
                     }
-
                 }
             }
         });
@@ -247,14 +272,14 @@ public class DrawingWorkspace extends BorderPane {
         gc.setLineWidth(4);
         gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
 
+        if (getMode() == MODES.DRAWING_MODE) {
+            lt.render(canvas);
+        } /*else if () {
 
-        lt.render(canvas);
+        }*/
+
         for (int i = 0; i < lines.size(); i++) {
             lines.get(i).render(canvas);
-        }
-
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).display(canvas);
         }
 
     }
@@ -300,7 +325,6 @@ public class DrawingWorkspace extends BorderPane {
                         System.out.println((y) + " and " + (point.getY() - lines.get(i).getPointRadius()));
                         System.out.println((y) + " and " + (point.getY() + lines.get(i).getPointRadius()));
 
-                        System.out.println(isSpotVacant(current));
                        if (x >= point.getX() - current.getPointRadius() &&
                                 x <= point.getX() + current.getPointRadius() &&
                                 y >= point.getY() - current.getPointRadius() &&
@@ -309,6 +333,7 @@ public class DrawingWorkspace extends BorderPane {
                                 System.out.println("SPOT IS VACANT");
                                 Receiver receiver = new Receiver(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
                                 receiver.addRoute(pts);
+                                current.addPlayer(receiver);
                                 players.push(receiver);
                                 System.out.println("sprite created");
                                 System.out.println(MainWorkspace.FramesPerSecond());

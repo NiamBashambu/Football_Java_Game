@@ -48,6 +48,9 @@ public class LineTool {
     public void removePlayer() {
         sprite = null;
     }
+    public Sprite getPlayer() {
+        return sprite;
+    }
     public boolean isRouteVacant() {
         if (sprite == null) {
             return true;
@@ -77,11 +80,18 @@ public class LineTool {
         return true;
     }
 
-    public boolean render (Canvas c) {
+    /* public void refresh() {
+        if (sprite != null) {
+            sprite.display(c);
+        }
+    }*/
 
+    public boolean render (Canvas c) {
         GraphicsContext gc =  c.getGraphicsContext2D();
         gc.setFill(Color.RED);
-
+        if (points.size()==0) {
+            System.out.println("no points");
+        }
         for (int i = 0; i < points.size(); i++) {
             Point2D p = points.get(i);
             if (i != 0) {
@@ -95,6 +105,9 @@ public class LineTool {
                 gc.setStroke(Color.LIGHTGREEN);
                 gc.strokeLine(p2.getX(), p2.getY(), p.getX(), p.getY());
             }
+        }
+        if (sprite != null) {
+            sprite.display(c);
         }
         return true;
     }
