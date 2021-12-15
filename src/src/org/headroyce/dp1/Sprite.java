@@ -66,28 +66,6 @@ public class Sprite {
     public void display(Canvas c) {
         GraphicsContext gc = c.getGraphicsContext2D();
 
-        /* Stack<LineTool> lines =
-
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        gc.setFill(Color.GREEN);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        gc.setStroke(Color.WHITE);
-        gc.setLineWidth(4);
-        gc.strokeLine(0, canvas.getHeight() * 0.8, canvas.getWidth(), canvas.getHeight() * 0.8);
-
-        for (int i = 0; i < lines.size(); i++) {
-            lines.get(i).render(canvas);
-        }
-
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).display(canvas);
-        }*/
-        /* gc.clearRect(prevX, prevY, w, h);
-        gc.setFill(Color.GREEN);
-        gc.fillRect(prevX, prevY, w, h);*/
-
         gc.setFill(Color.BLUE);
         gc.fillRect(x, y, w, h);
         gc.setStroke(Color.WHITE);

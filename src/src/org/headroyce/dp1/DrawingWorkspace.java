@@ -1,7 +1,5 @@
 package org.headroyce.dp1;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -21,7 +19,9 @@ public class DrawingWorkspace extends BorderPane {
     private GraphicsContext gc;
     private MODES mode;
     private Stack<LineTool> lines;
-    private Stack<Sprite> players;
+    private Stack<Sprite> immovables;
+    private final double canvasWidth = 718;
+    private final double canvasHeight = 598;
 
 
     public static enum MODES {
@@ -49,7 +49,13 @@ public class DrawingWorkspace extends BorderPane {
         lines = new Stack<>();
         VBox tools = new VBox();
 
-        this.players = new Stack<>();
+        this.immovables = new Stack<>();
+        immovables.add(new Quarterback(canvasWidth/2, canvasHeight-40, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvasWidth/2-60, canvasHeight-100, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvasWidth/2-30, canvasHeight-105, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvasWidth/2, canvasHeight-110, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvasWidth/2+30, canvasHeight-105, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvasWidth/2+60, canvasHeight-100, DrawingWorkspace.this));
 
         //undo route button
         // removes the last route created and any player attached to it
@@ -187,25 +193,29 @@ public class DrawingWorkspace extends BorderPane {
         });
         //undo player button
         // removes the last player created
-        Node undoPlayerButton = lt.renderTool("Undo Player");
+        /*Node undoPlayerButton = lt.renderTool("Undo Player");
         undoPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if(evt.isPrimaryButtonDown()){
                     if (!lines.isEmpty()) {
                         lines.get(lines.size()-1).removePlayer();
-                        refreshScreen();
+                    } else {
+                        lt.removePlayer();
                     }
+                    System.out.println(lines.size());
+                    System.out.println(lines.get(0).getPlayer());
+                    refreshScreen();
                 }
             }
-        });
+        });*/
 
         Node runPlayButton = lt.renderTool("Run Play");
         runPlayButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                for (int i = 0; i < players.size(); i++) {
-                    players.get(i).getST().play();
+                for (int i = 0; i < lines.size(); i++) {
+                    lines.get(i).getPlayer().getST().play();
                 }
             }
         });
@@ -213,8 +223,8 @@ public class DrawingWorkspace extends BorderPane {
         resetPlayButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                for (int i = 0; i < players.size(); i++) {
-                    Sprite s = players.get(i);
+                for (int i = 0; i < lines.size(); i++) {
+                    Sprite s = lines.get(i).getPlayer();
                     s.setX(s.getPrevX());
                     s.setY(s.getPrevY());
                 }
@@ -230,7 +240,7 @@ public class DrawingWorkspace extends BorderPane {
         tools.getChildren().add(undoRouteButton);
         tools.getChildren().add(clearButton);
         tools.getChildren().add(addPlayerButton);
-        tools.getChildren().add(undoPlayerButton);
+        // tools.getChildren().add(undoPlayerButton);
         tools.getChildren().add(runPlayButton);
         tools.getChildren().add(resetPlayButton);
 
@@ -257,8 +267,8 @@ public class DrawingWorkspace extends BorderPane {
     public Stack<LineTool> getLines() {
         return lines;
     }
-    public Stack<Sprite> getPlayers() {
-        return players;
+    public Stack<Sprite> getImmovables() {
+        return immovables;
     }
 
     public void refreshScreen() {
@@ -278,6 +288,10 @@ public class DrawingWorkspace extends BorderPane {
 
         }*/
 
+        for (int i = 0; i < immovables.size(); i++) {
+            immovables.get(i).display(canvas);
+        }
+
         for (int i = 0; i < lines.size(); i++) {
             lines.get(i).render(canvas);
         }
@@ -285,15 +299,15 @@ public class DrawingWorkspace extends BorderPane {
     }
 
     // try to make big oh smaller
-    public boolean isSpotVacant (LineTool lineTool) {
-        if (players.size() == 0) {
-            return true;
+    /*public boolean isSpotVacant (LineTool lineTool) {
+        for (int i = 0; i < lines.size(); i++) {
+
         }
         if (lineTool.isRouteVacant()) {
             return true;
         }
         return false;
-    }
+    }*/
 
 //putting the players on the created route
     public class mouseHandler implements EventHandler<MouseEvent> {
@@ -329,16 +343,13 @@ public class DrawingWorkspace extends BorderPane {
                                 x <= point.getX() + current.getPointRadius() &&
                                 y >= point.getY() - current.getPointRadius() &&
                                 y <= point.getY() + current.getPointRadius()) {
-                            if (isSpotVacant(current)) {
-                                System.out.println("SPOT IS VACANT");
-                                Receiver receiver = new Receiver(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
-                                receiver.addRoute(pts);
-                                current.addPlayer(receiver);
-                                players.push(receiver);
-                                System.out.println("sprite created");
-                                System.out.println(MainWorkspace.FramesPerSecond());
-                                refreshScreen();
-                            }
+                            System.out.println("SPOT IS VACANT");
+                            Receiver receiver = new Receiver(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
+                            receiver.addRoute(pts);
+                            current.addPlayer(receiver);
+                            System.out.println("sprite created");
+                            System.out.println(MainWorkspace.FramesPerSecond());
+                            refreshScreen();
                         }
                     }
 
