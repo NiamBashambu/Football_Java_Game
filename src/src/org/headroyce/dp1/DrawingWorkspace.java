@@ -22,6 +22,9 @@ public class DrawingWorkspace extends BorderPane {
     private Stack<Sprite> immovables;
     private final double canvasWidth = 718;
     private final double canvasHeight = 598;
+    private Node addPlayerButton;
+    private Node ltButton;
+
 
 
     public static enum MODES {
@@ -153,12 +156,13 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //creating route button
-        Node ltButton = lt.renderTool("Route");
+        ltButton = lt.renderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
+                        ltButton.setStyle(null);
                         if (lt.getPoints().size() != 0) {
                             lines.push(lt);
                             System.out.println(lines.size());
@@ -167,6 +171,8 @@ public class DrawingWorkspace extends BorderPane {
                         setMode(MODES.ALL_OFF);
 
                     } else if (getMode() != MODES.DRAWING_MODE) {
+                        ltButton.setStyle("-fx-background-color: darkgray");
+                        addPlayerButton.setStyle(null);
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                     }
@@ -175,17 +181,20 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //add player button
-        Node addPlayerButton = lt.renderTool("Add Player");
+        addPlayerButton = lt.renderTool("Add Player");
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if(evt.isPrimaryButtonDown()){
                     if(getMode() != MODES.STAMP_MODE){
+                        addPlayerButton.setStyle("-fx-background-color: darkgray");
                         if (getMode() == MODES.DRAWING_MODE) {
                             lines.push(lt);
+                            ltButton.setStyle(null);
                         }
                         setMode(MODES.STAMP_MODE);
                     } else {
+                        addPlayerButton.setStyle(null);
                         setMode(MODES.ALL_OFF);
                     }
                 }
