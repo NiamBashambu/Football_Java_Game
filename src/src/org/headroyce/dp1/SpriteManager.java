@@ -1,4 +1,4 @@
-package org.headroyce.dp1;
+/* package org.headroyce.dp1;
 
 import java.util.*;
 
@@ -60,4 +60,4 @@ public class SpriteManager {
         // reset the clean up sprites
         CLEAN_UP_SPRITES.clear();
     }
-}
+}*/

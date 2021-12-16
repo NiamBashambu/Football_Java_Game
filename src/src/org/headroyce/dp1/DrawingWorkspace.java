@@ -224,7 +224,15 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 for (int i = 0; i < lines.size(); i++) {
-                    lines.get(i).getPlayer().getST().play();
+                    if (lt.getPlayer() != null) {
+                        lt.getPlayer().getST().play();
+                    }
+                    lt.getPlayer();
+                    if (!lines.isEmpty()) {
+                        if (lines.get(i).getPlayer() != null) {
+                            lines.get(i).getPlayer().getST().play();
+                        }
+                    }
                 }
             }
         });
@@ -327,6 +335,11 @@ public class DrawingWorkspace extends BorderPane {
                 Point2D p = new Point2D(evt.getX(), evt.getY());
                 lt.addPoint(p);
                 lt.render(canvas);
+                LList<Point2D> pts = lt.getPoints();
+                if (lt.getPlayer() != null) {
+                    lt.getPlayer().getST().getChildren().clear();
+                    lt.getPlayer().addRoute(pts);
+                }
                 System.out.println("p");
             }
             if (mode == MODES.STAMP_MODE) {
@@ -357,7 +370,7 @@ public class DrawingWorkspace extends BorderPane {
                             receiver.addRoute(pts);
                             current.addPlayer(receiver);
                             System.out.println("sprite created");
-                            System.out.println(MainWorkspace.FramesPerSecond());
+                            // System.out.println(MainWorkspace.FramesPerSecond());
                             refreshScreen();
                         }
                     }
