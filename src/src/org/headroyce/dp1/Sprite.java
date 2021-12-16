@@ -13,6 +13,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.Stack;
@@ -70,6 +71,12 @@ public class Sprite {
         gc.fillRect(x, y, w, h);
         gc.setStroke(Color.WHITE);
         gc.strokeRect(x, y, w, h);
+        gc.setStroke(Color.RED);
+        gc.setFont(new Font("Arial", 15));
+        gc.setLineWidth(1);
+        gc.strokeText(type,x,y-3);
+        gc.setLineWidth(4);
+
 
         System.err.println("PLAYER REMDER");
 
