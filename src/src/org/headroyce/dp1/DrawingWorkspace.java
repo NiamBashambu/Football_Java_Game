@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -51,6 +52,9 @@ public class DrawingWorkspace extends BorderPane {
         lt = new LineTool(canvas);
         lines = new Stack<>();
         VBox tools = new VBox();
+       // Slider slider= new Slider();
+       // VBox sliders = new VBox();
+
 
         this.immovables = new Stack<>();
         immovables.add(new Quarterback(canvasWidth/2, canvasHeight-40, DrawingWorkspace.this));
@@ -252,6 +256,10 @@ public class DrawingWorkspace extends BorderPane {
 
 
 
+
+
+
+
         tools.getChildren().add(ltButton);
         tools.getChildren().add(undoPointButton);
         tools.getChildren().add(undoRouteButton);
@@ -260,8 +268,10 @@ public class DrawingWorkspace extends BorderPane {
         // tools.getChildren().add(undoPlayerButton);
         tools.getChildren().add(runPlayButton);
         tools.getChildren().add(resetPlayButton);
+        //sliders.getChildren().add(slider);
 
         this.setRight(tools);
+       // this.setLeft(sliders);
         this.setCenter(center);
 
         mode = MODES.ALL_OFF;
