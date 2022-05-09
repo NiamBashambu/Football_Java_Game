@@ -66,6 +66,10 @@ public class DrawingWorkspace extends BorderPane {
         immovables.add(new OffensiveLineman(canvas.widthProperty().intValue()/2, canvas.heightProperty().intValue() * 0.81, DrawingWorkspace.this));
         immovables.add(new OffensiveLineman(canvas.widthProperty().intValue()* 0.46, canvas.heightProperty().intValue() * 0.82, DrawingWorkspace.this));
         immovables.add(new OffensiveLineman(canvas.widthProperty().intValue() * 0.42, canvas.heightProperty().intValue() * 0.83, DrawingWorkspace.this));
+        immovables.add(new DefensiveLine(canvas.widthProperty().intValue() * 0.58, canvas.heightProperty().intValue() * 0.73, DrawingWorkspace.this));
+        immovables.add(new DefensiveLine(canvas.widthProperty().intValue()* 0.54, canvas.heightProperty().intValue() * 0.72, DrawingWorkspace.this));
+        immovables.add(new DefensiveLine(canvas.widthProperty().intValue()* 0.46, canvas.heightProperty().intValue() * 0.72, DrawingWorkspace.this));
+        immovables.add(new DefensiveLine(canvas.widthProperty().intValue() * 0.42, canvas.heightProperty().intValue() * 0.73, DrawingWorkspace.this));
 
 
         //undo route button
@@ -321,8 +325,8 @@ public class DrawingWorkspace extends BorderPane {
         }*/
 
 
-        double[] xValues = new double[]{ 0.5, 0.58, 0.54, 0.5, 0.46, 0.42};
-        double[] yValues = new double[]{0.9, 0.82, 0.81, 0.8, 0.81, 0.82};
+        double[] xValues = new double[]{ 0.5, 0.58, 0.54, 0.5, 0.46, 0.42,0.58,0.54,0.46,0.42};
+        double[] yValues = new double[]{0.9, 0.82, 0.81, 0.8, 0.81, 0.82,0.73,0.72,0.72,0.73};
 
 
         for (int i = 0; i < immovables.size(); i++) {

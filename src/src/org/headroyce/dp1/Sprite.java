@@ -68,10 +68,14 @@ public class Sprite {
         GraphicsContext gc = c.getGraphicsContext2D();
 
         gc.setFill(Color.BLUE);
+        if(type.equals("DL")||type.equals("DB")||type.equals("LB")){
+            gc.setFill(Color.RED);
+        }
+
         gc.fillRect(x, y, w, h);
         gc.setStroke(Color.WHITE);
         gc.strokeRect(x, y, w, h);
-        gc.setStroke(Color.RED);
+        gc.setStroke(Color.BLACK);
         gc.setFont(new Font("Arial", 15));
         gc.setLineWidth(1);
         gc.strokeText(type,x,y-3);
