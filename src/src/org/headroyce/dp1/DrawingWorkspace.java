@@ -1,16 +1,18 @@
 package org.headroyce.dp1;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Window;
 
 import java.util.Stack;
 
@@ -21,8 +23,8 @@ public class DrawingWorkspace extends BorderPane {
     private MODES mode;
     private Stack<LineTool> lines;
     private Stack<Sprite> immovables;
-    private final double canvasWidth = 718;
-    private final double canvasHeight = 598;
+    private double canvasWidth;
+    private double canvasHeight;
     private Node addPlayerButton;
     private Node ltButton;
 
@@ -55,14 +57,16 @@ public class DrawingWorkspace extends BorderPane {
        // Slider slider= new Slider();
        // VBox sliders = new VBox();
 
+        System.out.println(canvas.widthProperty().intValue());
 
         this.immovables = new Stack<>();
-        immovables.add(new Quarterback(canvasWidth/2, canvasHeight-40, DrawingWorkspace.this));
-        immovables.add(new OffensiveLineman(canvasWidth/2-60, canvasHeight-100, DrawingWorkspace.this));
-        immovables.add(new OffensiveLineman(canvasWidth/2-30, canvasHeight-105, DrawingWorkspace.this));
-        immovables.add(new OffensiveLineman(canvasWidth/2, canvasHeight-110, DrawingWorkspace.this));
-        immovables.add(new OffensiveLineman(canvasWidth/2+30, canvasHeight-105, DrawingWorkspace.this));
-        immovables.add(new OffensiveLineman(canvasWidth/2+60, canvasHeight-100, DrawingWorkspace.this));
+        immovables.add(new Quarterback(canvas.widthProperty().intValue()/2, canvas.heightProperty().intValue() * 0.9, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvas.widthProperty().intValue() * 0.58, canvas.heightProperty().intValue() * 0.83, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvas.widthProperty().intValue()* 0.54, canvas.heightProperty().intValue() * 0.82, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvas.widthProperty().intValue()/2, canvas.heightProperty().intValue() * 0.81, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvas.widthProperty().intValue()* 0.46, canvas.heightProperty().intValue() * 0.82, DrawingWorkspace.this));
+        immovables.add(new OffensiveLineman(canvas.widthProperty().intValue() * 0.42, canvas.heightProperty().intValue() * 0.83, DrawingWorkspace.this));
+
 
         //undo route button
         // removes the last route created and any player attached to it
@@ -159,6 +163,7 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+
         //creating route button
         ltButton = lt.renderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -315,7 +320,14 @@ public class DrawingWorkspace extends BorderPane {
 
         }*/
 
+
+        double[] xValues = new double[]{ 0.5, 0.58, 0.54, 0.5, 0.46, 0.42};
+        double[] yValues = new double[]{0.9, 0.82, 0.81, 0.8, 0.81, 0.82};
+
+
         for (int i = 0; i < immovables.size(); i++) {
+            immovables.get(i).setX(canvas.widthProperty().intValue()*xValues[i]);
+            immovables.get(i).setY(canvas.heightProperty().intValue()*yValues[i]);
             immovables.get(i).display(canvas);
         }
 
