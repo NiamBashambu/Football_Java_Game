@@ -1,18 +1,18 @@
 package org.headroyce.dp1;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Window;
 
 import java.util.Stack;
 
@@ -27,6 +27,7 @@ public class DrawingWorkspace extends BorderPane {
     private double canvasHeight;
     private Node addPlayerButton;
     private Node ltButton;
+
 
 
 
@@ -213,6 +214,39 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+       //add defense button
+        MenuButton addDefenseButton = new MenuButton("Add Defense");
+        MenuItem man1 = new MenuItem("Man One Deep");
+        MenuItem man2 = new MenuItem("Man Two Deep");
+        MenuItem zone1 = new MenuItem("Zone One Deep");
+        MenuItem zone2 = new MenuItem("Zone Two Deep");
+
+        addDefenseButton.getItems().addAll(man1,man2,zone1,zone2);
+        man1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+        man2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+        zone1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+        zone2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+            }
+        });
+
         //undo player button
         // removes the last player created
         /*Node undoPlayerButton = lt.renderTool("Undo Player");
@@ -277,6 +311,7 @@ public class DrawingWorkspace extends BorderPane {
         // tools.getChildren().add(undoPlayerButton);
         tools.getChildren().add(runPlayButton);
         tools.getChildren().add(resetPlayButton);
+        tools.getChildren().add(addDefenseButton);
         //sliders.getChildren().add(slider);
 
         this.setRight(tools);
