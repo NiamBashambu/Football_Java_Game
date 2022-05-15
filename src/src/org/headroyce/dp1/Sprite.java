@@ -148,6 +148,63 @@ public class Sprite {
 
 
     }
+    public void addDefense(LList<Point2D> points) {
+        for (int i = 1; i < points.size(); i++) {
+            Point2D pt = points.get(i);
+            Point2D prev = points.get(i-1);
+            Double ptX = pt.getX();
+            Double ptY = pt.getY();
+            Double prevX = prev.getX();
+            Double prevY = prev.getY();
+            Double xDiff = ptX - prevX;
+            Double yDiff = ptY - prevY;
+            Double dist = Math.sqrt((xDiff*xDiff) + (yDiff*yDiff));
+            WritableValue<Double> xWritable = new WritableValue<Double>() {
+                @Override
+                public Double getValue() {
+                    return x;
+                }
+
+                @Override
+                public void setValue(Double aDouble) {
+                    // setPrevX(x);
+                    x = aDouble;
+                    // display(canvas);
+                    dw.refreshScreen();
+                }
+            };
+            WritableValue<Double> yWritable = new WritableValue<Double>() {
+                @Override
+                public Double getValue() {
+                    return y;
+                }
+
+                @Override
+                public void setValue(Double aDouble) {
+                    // setPrevY(y);
+                    y = aDouble;
+                    // display(canvas);
+                    dw.refreshScreen();
+                }
+            };
+            // Double endValue = 0.0;
+            KeyValue kfX = new KeyValue(xWritable, ptX - 2*pointRadius);
+            KeyValue kfY = new KeyValue(yWritable, ptY - 2*pointRadius);
+            EventHandler<ActionEvent> onFinished = new EventHandler<>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    //display(canvas);
+                    System.out.println("KeyFrame Happened");
+                }
+            };
+            Duration time = new Duration(10*dist/(Math.sqrt(vX*vX + vY*vY)));
+            Timeline tl = new Timeline();
+            tl.getKeyFrames().add(new KeyFrame(time, onFinished, kfX, kfY));
+            st.getChildren().add(tl);
+        }
+
+
+    }
 
     public void setX(double newX){
         this.x = newX;

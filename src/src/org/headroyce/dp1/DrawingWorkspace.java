@@ -14,11 +14,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class DrawingWorkspace extends BorderPane {
     private Canvas canvas;
     private LineTool lt;
+    // private LineToolDB  ltDB;
     private GraphicsContext gc;
     private MODES mode;
     private Stack<LineTool> lines;
@@ -27,6 +29,7 @@ public class DrawingWorkspace extends BorderPane {
     private double canvasHeight;
     private Node addPlayerButton;
     private Node ltButton;
+    private Stack<Sprite> DefensiveBacks;
 
 
 
@@ -53,6 +56,7 @@ public class DrawingWorkspace extends BorderPane {
         canvas.heightProperty().bind(center.heightProperty());
 //creating the lines and players and putting them in stacks
         lt = new LineTool(canvas);
+
         lines = new Stack<>();
         VBox tools = new VBox();
        // Slider slider= new Slider();
@@ -220,29 +224,50 @@ public class DrawingWorkspace extends BorderPane {
         MenuItem man2 = new MenuItem("Man Two Deep");
         MenuItem zone1 = new MenuItem("Zone One Deep");
         MenuItem zone2 = new MenuItem("Zone Two Deep");
-
+        this.DefensiveBacks = new Stack<>();
         addDefenseButton.getItems().addAll(man1,man2,zone1,zone2);
         man1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                DefensiveBacks.clear();
+                DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.5, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
+                refreshScreen();
+
+
+
+
+
+
+
 
             }
         });
         man2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                DefensiveBacks.clear();
+                DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.2, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
+                DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.6, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
+                refreshScreen();
+
 
             }
         });
         zone1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+                DefensiveBacks.clear();
+                DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.5, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
+                refreshScreen();
             }
         });
         zone2.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                DefensiveBacks.clear();
+                DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.2, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
+                DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.6, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
+                refreshScreen();
 
             }
         });
@@ -373,6 +398,13 @@ public class DrawingWorkspace extends BorderPane {
         for (int i = 0; i < lines.size(); i++) {
             lines.get(i).render(canvas);
         }
+        double [] xVal = new double[]{0.5,0.2,0.4,0.5,};
+        double [] yVal = new double[]{0.2,0.2,0.2,0.2,0.2,0.2};
+        for(int i = 0; i < DefensiveBacks.size();i++){
+            DefensiveBacks.get(i).setX(canvas.widthProperty().intValue()*xVal[i]);
+            DefensiveBacks.get(i).setY(canvas.heightProperty().intValue()*yVal[i]);
+            DefensiveBacks.get(i).display(canvas);
+        }
 
     }
 
@@ -428,7 +460,8 @@ public class DrawingWorkspace extends BorderPane {
                                 y <= point.getY() + current.getPointRadius()) {
                             System.out.println("SPOT IS VACANT");
                             Receiver receiver = new Receiver(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
-                            receiver.addRoute(pts);
+
+                           receiver.addRoute(pts);
                             current.addPlayer(receiver);
                             System.out.println("sprite created");
                             // System.out.println(MainWorkspace.FramesPerSecond());
