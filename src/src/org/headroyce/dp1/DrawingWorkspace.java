@@ -32,6 +32,7 @@ public class DrawingWorkspace extends BorderPane {
     private Node ltDBButton;
     private Node addDefensivePlayerButton;
     private Stack<Sprite> DefensiveBacks;
+    private Stack<Sprite> Linebackers;
 
 
 
@@ -183,6 +184,7 @@ public class DrawingWorkspace extends BorderPane {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
                         ltButton.setStyle(null);
+                        ltDBButton.setStyle(null);
                         if (lt.getPoints().size() != 0) {
                             lines.push(lt);
                             System.out.println(lines.size());
@@ -193,6 +195,7 @@ public class DrawingWorkspace extends BorderPane {
                     } else if (getMode() != MODES.DRAWING_MODE) {
                         ltButton.setStyle("-fx-background-color: darkgray");
                         addPlayerButton.setStyle(null);
+                        addDefensivePlayerButton.setStyle(null);
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                     }
@@ -207,6 +210,7 @@ public class DrawingWorkspace extends BorderPane {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
                         ltDBButton.setStyle(null);
+                        ltButton.setStyle(null);
                         if (lt.getPoints().size() != 0) {
                             lines.push(lt);
                             System.out.println(lines.size());
@@ -217,6 +221,7 @@ public class DrawingWorkspace extends BorderPane {
                     } else if (getMode() != MODES.DRAWING_MODE) {
                         ltDBButton.setStyle("-fx-background-color: darkgray");
                         addDefensivePlayerButton.setStyle(null);
+                        addPlayerButton.setStyle(null);
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                     }
@@ -235,10 +240,12 @@ public class DrawingWorkspace extends BorderPane {
                         if (getMode() == MODES.DRAWING_MODE) {
                             lines.push(lt);
                             ltDBButton.setStyle(null);
+                            ltButton.setStyle(null);
                         }
                         setMode(MODES.STAMP_MODE);
                     } else {
                         addDefensivePlayerButton.setStyle(null);
+                        addPlayerButton.setStyle(null);
                         setMode(MODES.ALL_OFF);
                     }
                 }
@@ -255,10 +262,12 @@ public class DrawingWorkspace extends BorderPane {
                         if (getMode() == MODES.DRAWING_MODE) {
                             lines.push(lt);
                             ltButton.setStyle(null);
+                            ltDBButton.setStyle(null);
                         }
                         setMode(MODES.STAMP_MODE);
                     } else {
                         addPlayerButton.setStyle(null);
+                        addDefensivePlayerButton.setStyle(null);
                         setMode(MODES.ALL_OFF);
                     }
                 }
@@ -271,11 +280,15 @@ public class DrawingWorkspace extends BorderPane {
         MenuItem zone1 = new MenuItem("Zone One Deep");
         MenuItem zone2 = new MenuItem("Zone Two Deep");
         this.DefensiveBacks = new Stack<>();
+        this.Linebackers = new Stack<>();
         addDefenseButton.getItems().addAll(man1,man2,zone1,zone2);
         man1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 DefensiveBacks.clear();
+                Linebackers.clear();
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.54, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.46, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
                 DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.5, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
                 refreshScreen();
 
@@ -292,6 +305,9 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 DefensiveBacks.clear();
+                Linebackers.clear();
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.54, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.46, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
                 DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.2, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
                 DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.6, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
                 refreshScreen();
@@ -303,6 +319,9 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 DefensiveBacks.clear();
+                Linebackers.clear();
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.54, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.46, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
                 DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.5, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
                 refreshScreen();
             }
@@ -311,6 +330,9 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 DefensiveBacks.clear();
+                Linebackers.clear();
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.54, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
+                Linebackers.add(new Linebacker(canvas.widthProperty().intValue()*0.46, canvas.heightProperty().intValue() * 0.65, 0,0,DrawingWorkspace.this));
                 DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.2, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
                 DefensiveBacks.add(new DefensiveBack(canvas.widthProperty().intValue()*0.6, canvas.heightProperty().intValue() * 0.2, 0,0,DrawingWorkspace.this));
                 refreshScreen();
@@ -453,6 +475,13 @@ public class DrawingWorkspace extends BorderPane {
             DefensiveBacks.get(i).setX(canvas.widthProperty().intValue()*xVal[i]);
             DefensiveBacks.get(i).setY(canvas.heightProperty().intValue()*yVal[i]);
             DefensiveBacks.get(i).display(canvas);
+        }
+        double [] xXVal = new double[]{0.54,0.46,0.54,0.46,0.54,0.46,0.54,0.46};
+        double [] yYVal = new double[]{0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65};
+        for(int i = 0; i < Linebackers.size();i++){
+            Linebackers.get(i).setX(canvas.widthProperty().intValue()*xXVal[i]);
+            Linebackers.get(i).setY(canvas.heightProperty().intValue()*yYVal[i]);
+            Linebackers.get(i).display(canvas);
         }
 
     }
