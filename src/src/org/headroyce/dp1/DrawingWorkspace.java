@@ -29,6 +29,8 @@ public class DrawingWorkspace extends BorderPane {
     private double canvasHeight;
     private Node addPlayerButton;
     private Node ltButton;
+    private Node ltDBButton;
+    private Node addDefensivePlayerButton;
     private Stack<Sprite> DefensiveBacks;
 
 
@@ -198,6 +200,50 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
+        ltDBButton = lt.renderTool("Defensive Route");
+        ltDBButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if (evt.isPrimaryButtonDown()) {
+                    if (getMode() == MODES.DRAWING_MODE) {
+                        ltDBButton.setStyle(null);
+                        if (lt.getPoints().size() != 0) {
+                            lines.push(lt);
+                            System.out.println(lines.size());
+                            //lt.clear();
+                        }
+                        setMode(MODES.ALL_OFF);
+
+                    } else if (getMode() != MODES.DRAWING_MODE) {
+                        ltDBButton.setStyle("-fx-background-color: darkgray");
+                        addDefensivePlayerButton.setStyle(null);
+                        setMode(MODES.DRAWING_MODE);
+                        lt = new LineTool(canvas);
+                    }
+
+                }
+
+            }
+        });
+        addDefensivePlayerButton = lt.renderTool("Add Defensive Player");
+        addDefensivePlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent evt) {
+                if(evt.isPrimaryButtonDown()){
+                    if(getMode() != MODES.STAMP_MODE){
+                        addDefensivePlayerButton.setStyle("-fx-background-color: darkgray");
+                        if (getMode() == MODES.DRAWING_MODE) {
+                            lines.push(lt);
+                            ltDBButton.setStyle(null);
+                        }
+                        setMode(MODES.STAMP_MODE);
+                    } else {
+                        addDefensivePlayerButton.setStyle(null);
+                        setMode(MODES.ALL_OFF);
+                    }
+                }
+            }
+        });
         //add player button
         addPlayerButton = lt.renderTool("Add Player");
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -333,10 +379,13 @@ public class DrawingWorkspace extends BorderPane {
         tools.getChildren().add(undoRouteButton);
         tools.getChildren().add(clearButton);
         tools.getChildren().add(addPlayerButton);
+        tools.getChildren().add(addDefenseButton);
+        tools.getChildren().add(ltDBButton);
+        tools.getChildren().add(addDefensivePlayerButton);
         // tools.getChildren().add(undoPlayerButton);
         tools.getChildren().add(runPlayButton);
         tools.getChildren().add(resetPlayButton);
-        tools.getChildren().add(addDefenseButton);
+
         //sliders.getChildren().add(slider);
 
         this.setRight(tools);
@@ -463,6 +512,10 @@ public class DrawingWorkspace extends BorderPane {
 
                            receiver.addRoute(pts);
                             current.addPlayer(receiver);
+                           DefensiveBack defensiveBack = new DefensiveBack(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
+
+                           defensiveBack.addRoute(pts);
+                           current.addPlayer(defensiveBack);
                             System.out.println("sprite created");
                             // System.out.println(MainWorkspace.FramesPerSecond());
                             refreshScreen();
