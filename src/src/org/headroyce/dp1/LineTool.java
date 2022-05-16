@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 
 public class LineTool {
@@ -28,9 +29,22 @@ public class LineTool {
         points = new LList<>();
         // select(false);
     }
-
     public Node renderTool(String s) {
         Button toolGUI = new Button(s);
+
+        return toolGUI;
+    }
+    public Node OFrenderTool(String s) {
+        Button toolGUI = new Button(s);
+        toolGUI.setStyle("-fx-background-color: Blue");
+        toolGUI.setTextFill(Color.WHITE);
+
+        return toolGUI;
+    }
+    public Node DFrenderTool(String s) {
+        Button toolGUI = new Button(s);
+        toolGUI.setStyle("-fx-background-color: Red");
+        toolGUI.setTextFill(Color.WHITE);
         return toolGUI;
     }
 

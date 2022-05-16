@@ -177,14 +177,14 @@ public class DrawingWorkspace extends BorderPane {
         });
 
         //creating route button
-        ltButton = lt.renderTool("Route");
+        ltButton = lt.OFrenderTool("Route");
         ltButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
                         ltButton.setStyle(null);
-                        ltDBButton.setStyle(null);
+
                         if (lt.getPoints().size() != 0) {
                             lines.push(lt);
                             System.out.println(lines.size());
@@ -194,8 +194,8 @@ public class DrawingWorkspace extends BorderPane {
 
                     } else if (getMode() != MODES.DRAWING_MODE) {
                         ltButton.setStyle("-fx-background-color: darkgray");
-                        addPlayerButton.setStyle(null);
-                        addDefensivePlayerButton.setStyle(null);
+
+
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                     }
@@ -203,14 +203,14 @@ public class DrawingWorkspace extends BorderPane {
                 }
             }
         });
-        ltDBButton = lt.renderTool("Defensive Route");
+        ltDBButton = lt.DFrenderTool("Defensive Route");
         ltDBButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
                 if (evt.isPrimaryButtonDown()) {
                     if (getMode() == MODES.DRAWING_MODE) {
                         ltDBButton.setStyle(null);
-                        ltButton.setStyle(null);
+
                         if (lt.getPoints().size() != 0) {
                             lines.push(lt);
                             System.out.println(lines.size());
@@ -220,8 +220,7 @@ public class DrawingWorkspace extends BorderPane {
 
                     } else if (getMode() != MODES.DRAWING_MODE) {
                         ltDBButton.setStyle("-fx-background-color: darkgray");
-                        addDefensivePlayerButton.setStyle(null);
-                        addPlayerButton.setStyle(null);
+
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                     }
@@ -230,7 +229,7 @@ public class DrawingWorkspace extends BorderPane {
 
             }
         });
-        addDefensivePlayerButton = lt.renderTool("Add Defensive Player");
+        addDefensivePlayerButton = lt.DFrenderTool("Add Defensive Player");
         addDefensivePlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
@@ -240,34 +239,35 @@ public class DrawingWorkspace extends BorderPane {
                         if (getMode() == MODES.DRAWING_MODE) {
                             lines.push(lt);
                             ltDBButton.setStyle(null);
-                            ltButton.setStyle(null);
+
                         }
                         setMode(MODES.STAMP_MODE);
                     } else {
                         addDefensivePlayerButton.setStyle(null);
-                        addPlayerButton.setStyle(null);
+
                         setMode(MODES.ALL_OFF);
                     }
                 }
             }
         });
         //add player button
-        addPlayerButton = lt.renderTool("Add Player");
+        addPlayerButton = lt.OFrenderTool("Add Player");
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
+
                 if(evt.isPrimaryButtonDown()){
                     if(getMode() != MODES.STAMP_MODE){
                         addPlayerButton.setStyle("-fx-background-color: darkgray");
                         if (getMode() == MODES.DRAWING_MODE) {
                             lines.push(lt);
                             ltButton.setStyle(null);
-                            ltDBButton.setStyle(null);
+
                         }
                         setMode(MODES.STAMP_MODE);
                     } else {
                         addPlayerButton.setStyle(null);
-                        addDefensivePlayerButton.setStyle(null);
+
                         setMode(MODES.ALL_OFF);
                     }
                 }
@@ -275,6 +275,8 @@ public class DrawingWorkspace extends BorderPane {
         });
        //add defense button
         MenuButton addDefenseButton = new MenuButton("Add Defense");
+        addDefenseButton.setStyle("-fx-background-color: Red");
+        addDefenseButton.setTextFill(Color.WHITE);
         MenuItem man1 = new MenuItem("Man One Deep");
         MenuItem man2 = new MenuItem("Man Two Deep");
         MenuItem zone1 = new MenuItem("Zone One Deep");
