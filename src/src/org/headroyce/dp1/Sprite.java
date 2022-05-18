@@ -130,6 +130,7 @@ public class Sprite {
                     dw.refreshScreen();
                 }
             };
+
             // Double endValue = 0.0;
             KeyValue kfX = new KeyValue(xWritable, ptX - 2*pointRadius);
             KeyValue kfY = new KeyValue(yWritable, ptY - 2*pointRadius);
@@ -148,7 +149,7 @@ public class Sprite {
 
 
     }
-    public void addDefense(LList<Point2D> points) {
+    public void addDBRoute(LList<Point2D> points) {
         for (int i = 1; i < points.size(); i++) {
             Point2D pt = points.get(i);
             Point2D prev = points.get(i-1);
@@ -187,6 +188,7 @@ public class Sprite {
                     dw.refreshScreen();
                 }
             };
+
             // Double endValue = 0.0;
             KeyValue kfX = new KeyValue(xWritable, ptX - 2*pointRadius);
             KeyValue kfY = new KeyValue(yWritable, ptY - 2*pointRadius);

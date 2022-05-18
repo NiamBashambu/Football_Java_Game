@@ -20,6 +20,7 @@ public class LineTool {
     private Canvas c;
 
     private Sprite sprite;
+    private DefensiveBack defensiveBack;
 
 
     public LineTool(Canvas c){
@@ -59,14 +60,27 @@ public class LineTool {
     public void addPlayer(Sprite s) {
         sprite = s;
     }
+    public void addDBPlayer (DefensiveBack db){defensiveBack = db;}
     public void removePlayer() {
         sprite = null;
+    }
+    public void removeDBPlayer() {
+        defensiveBack = null;
     }
     public Sprite getPlayer() {
         return sprite;
     }
+    public DefensiveBack getDBPlayer() {
+        return defensiveBack;
+    }
     public boolean isRouteVacant() {
         if (sprite == null) {
+            return true;
+        }
+        return false;
+    }
+    public boolean isDBRouteVacant() {
+        if (defensiveBack == null) {
             return true;
         }
         return false;
@@ -122,6 +136,9 @@ public class LineTool {
         }
         if (sprite != null) {
             sprite.display(c);
+        }
+        if (defensiveBack != null) {
+            defensiveBack.display(c);
         }
         return true;
     }

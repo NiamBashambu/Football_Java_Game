@@ -221,6 +221,7 @@ public class DrawingWorkspace extends BorderPane {
                     } else if (getMode() != MODES.DRAWING_MODE) {
                         ltDBButton.setStyle("-fx-background-color: darkgray");
 
+
                         setMode(MODES.DRAWING_MODE);
                         lt = new LineTool(canvas);
                     }
@@ -233,6 +234,7 @@ public class DrawingWorkspace extends BorderPane {
         addDefensivePlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
+
                 if(evt.isPrimaryButtonDown()){
                     if(getMode() != MODES.STAMP_MODE){
                         addDefensivePlayerButton.setStyle("-fx-background-color: darkgray");
@@ -366,13 +368,16 @@ public class DrawingWorkspace extends BorderPane {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 for (int i = 0; i < lines.size(); i++) {
-                    if (lt.getPlayer() != null) {
+                    if (lt.getPlayer() != null &&lt.getDBPlayer() !=null) {
                         lt.getPlayer().getST().play();
+                        lt.getDBPlayer().getST().play();
                     }
                     lt.getPlayer();
+                    lt.getDBPlayer();
                     if (!lines.isEmpty()) {
-                        if (lines.get(i).getPlayer() != null) {
+                        if (lines.get(i).getPlayer() != null &&lines.get(i).getDBPlayer() != null) {
                             lines.get(i).getPlayer().getST().play();
+                            lines.get(i).getDBPlayer().getST().play();
                         }
                     }
                 }
@@ -384,8 +389,11 @@ public class DrawingWorkspace extends BorderPane {
             public void handle(MouseEvent mouseEvent) {
                 for (int i = 0; i < lines.size(); i++) {
                     Sprite s = lines.get(i).getPlayer();
+                    DefensiveBack db = lines.get(i).getDBPlayer();
                     s.setX(s.getPrevX());
                     s.setY(s.getPrevY());
+                    db.setX(db.getPrevX());
+                    db.setY(db.getPrevY());
                 }
                 refreshScreen();
             }
@@ -404,8 +412,8 @@ public class DrawingWorkspace extends BorderPane {
         tools.getChildren().add(clearButton);
         tools.getChildren().add(addPlayerButton);
         tools.getChildren().add(addDefenseButton);
-        tools.getChildren().add(ltDBButton);
-        tools.getChildren().add(addDefensivePlayerButton);
+       // tools.getChildren().add(ltDBButton);
+       // tools.getChildren().add(addDefensivePlayerButton);
         // tools.getChildren().add(undoPlayerButton);
         tools.getChildren().add(runPlayButton);
         tools.getChildren().add(resetPlayButton);
@@ -509,9 +517,11 @@ public class DrawingWorkspace extends BorderPane {
                 lt.addPoint(p);
                 lt.render(canvas);
                 LList<Point2D> pts = lt.getPoints();
-                if (lt.getPlayer() != null) {
+                if (lt.getPlayer() != null && lt.getDBPlayer() !=null) {
                     lt.getPlayer().getST().getChildren().clear();
+                    lt.getDBPlayer().getST().getChildren().clear();
                     lt.getPlayer().addRoute(pts);
+                    lt.getDBPlayer().addDBRoute(pts);
                 }
                 System.out.println("p");
             }
@@ -543,10 +553,10 @@ public class DrawingWorkspace extends BorderPane {
 
                            receiver.addRoute(pts);
                             current.addPlayer(receiver);
-                           DefensiveBack defensiveBack = new DefensiveBack(point.getX() - 2*current.getPointRadius(), point.getY() - 2*current.getPointRadius(), 1,1, DrawingWorkspace.this);
+                           DefensiveBack defensiveBack = new DefensiveBack(point.getX() - 2*current.getPointRadius() , point.getY() - 2*current.getPointRadius()*8, 1,1, DrawingWorkspace.this);
 
-                           defensiveBack.addRoute(pts);
-                           current.addPlayer(defensiveBack);
+                           defensiveBack.addDBRoute(pts);
+                           current.addDBPlayer(defensiveBack);
                             System.out.println("sprite created");
                             // System.out.println(MainWorkspace.FramesPerSecond());
                             refreshScreen();
