@@ -253,7 +253,7 @@ public class DrawingWorkspace extends BorderPane {
             }
         });
         //add player button
-        addPlayerButton = lt.OFrenderTool("Add Player");
+        addPlayerButton = lt.renderTool("Add Player");
         addPlayerButton.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent evt) {
